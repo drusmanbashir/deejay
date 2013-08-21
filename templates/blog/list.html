@@ -1,0 +1,24 @@
+{% include 'blog/header.html' %}
+        </aside>
+        <section id ="content">
+        <article>
+        {% for post in posts %}
+        <h2><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></h2>
+        <h3>{{ post.created}}</h3>
+        <!--<h3>By {{ post.author.first_name }} {{ post.author.last_name }}</h3>--!>
+        <h3>Categories: {% for category in post.categories.all %} {{ category.title }} {% endfor %}</h3>
+        {%endfor%}
+        <br />
+        </article>
+        </section>
+      </div>
+    </div>
+  </div>
+</div>
+{% if page.has_previous %}
+<a href="/{{ page.previous_page_number }}/">Previous Page</a>
+{% endif %}
+{% if page.has_next %}
+<a href="/{{ page.next_page_number }}/">Next Page</a>
+{% endif %}
+{% include 'blog/footer.html' %}

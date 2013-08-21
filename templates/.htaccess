@@ -1,0 +1,11 @@
+AddHandler fcgid-script .fcgi
+# For security reasons, Option followsymlinks cannot be overridden.
+#Options +FollowSymLinks
+Options +SymLinksIfOwnerMatch
+RewriteEngine On
+RewriteBase /
+RewriteRule ^(media/.*)$ - [L]
+RewriteRule ^(adminmedia/.*)$ - [L]
+RewriteCond %{REQUEST_URI} !(django.fcgi)
+RewriteRule ^(.*)$ django.fcgi/$1 [L]
+AddHandler application/x-httpd-php5s .php

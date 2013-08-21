@@ -1,0 +1,69 @@
+
+<!DOCTYPE html>
+
+{% load staticfiles %}
+<html lang="en">
+  <head>
+    <title>Home Page | Docsmarts.com</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="{% static "css/reset.css"%}" type="text/css" media="all">
+    <link rel="stylesheet" href="{% static "css/style.css"%}" type="text/css" media="all">
+    <link rel="stylesheet" href="{% static "css/pygments.css"%}" type="text/css" media="all">
+    <link rel="stylesheet" href="{% static "ui-lightness/jquery-ui-1.10.2.custom.css"%}" type="text/css" media="all">
+    <script type="text/javascript" src="{% static "js/my.js"%}"></script>
+    <script type="text/javascript" src="{% static "js/canvas.js"%}"></script>
+
+    <script type="text/javascript" src="{% static "js/jquery-1.9.1.js"%}" ></script>
+    <script type="text/javascript" src="{% static "js/cufon-yui.js"%}"></script>
+    <script type="text/javascript" src="{% static "js/Humanst521_BT_400.font.js"%}"></script>
+    <script type="text/javascript" src="{% static "js/Humanst521_Lt_BT_400.font.js"%}"></script>
+    <script type="text/javascript" src="{% static "js/roundabout.js"%}"></script>
+    <script type="text/javascript" src="{% static "js/roundabout_shapes.js"></script>
+    <script type="text/javascript" src="{% static "js/gallery_init.js"%}"></script>
+    <script type="text/javascript" src="{% static "js/cufon-replace.js"%}"></script>
+
+    <!--[if lt IE 7]>
+    <link rel="stylesheet" href="css/ie/ie6.css" type="text/css" media="all">
+    <![endif]-->
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="/static/js/html5.js"></script>
+    <script type="text/javascript" src="/static/js/IE9.js"></script>
+    <![endif]-->
+  </head>
+
+
+  <body>
+
+    <header>
+    <div class="container">
+      <h1><img src="{% static "images/logo.jpg"%}" ><a href="{% url 'latest' %}">DocSmarts</a></h1>
+      <nav>
+      <ul>
+        <li><a href="{%url 'latest' %}" class="current">Home</a></li>
+        <li><a href="media.html">Media</a></li>
+        {% load flatpages%}
+        {% get_flatpages as flatpages%}
+        {%for flatpage in flatpages%}
+        <li><a href="{{flatpage.url}}">{{flatpage.title}}</a></li>
+        {%endfor %}
+      </ul>
+      <a href="/feeds/posts/"><img src="{% static "irss.png"%}" width="50px" height="50px"></a>
+      </nav>
+    </div>
+    </header>
+    <div id="main">
+      <div class = "main-box">
+        <div class = "container">
+          <div class = "inside">
+            <div class ="wrapper">
+              <div id ="aside">
+              <h2> Monthly <span> Archive </span></h2>
+              <ul class="news">
+                {%for month in months %}
+                <li>
+                <a href="{%url 'list' 2013 month.1 %}">{{month.2}}</a><br/>
+                </li>
+                {%endfor%}
+              </ul>
+
+

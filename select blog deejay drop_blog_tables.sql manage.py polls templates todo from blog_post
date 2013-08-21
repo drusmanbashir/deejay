@@ -1,0 +1,36 @@
+                       List of relations
+ Schema |               Name                |   Type   | Owner 
+--------+-----------------------------------+----------+-------
+ public | auth_group                        | table    | usman
+ public | auth_group_id_seq                 | sequence | usman
+ public | auth_group_permissions            | table    | usman
+ public | auth_group_permissions_id_seq     | sequence | usman
+ public | auth_permission                   | table    | usman
+ public | auth_permission_id_seq            | sequence | usman
+ public | auth_user                         | table    | usman
+ public | auth_user_groups                  | table    | usman
+ public | auth_user_groups_id_seq           | sequence | usman
+ public | auth_user_id_seq                  | sequence | usman
+ public | auth_user_user_permissions        | table    | usman
+ public | auth_user_user_permissions_id_seq | sequence | usman
+ public | blog_category                     | table    | usman
+ public | blog_category_id_seq              | sequence | usman
+ public | blog_post                         | table    | usman
+ public | blog_post_id_seq                  | sequence | usman
+ public | django_admin_log                  | table    | usman
+ public | django_admin_log_id_seq           | sequence | usman
+ public | django_content_type               | table    | usman
+ public | django_content_type_id_seq        | sequence | usman
+ public | django_session                    | table    | usman
+ public | django_site                       | table    | usman
+ public | django_site_id_seq                | sequence | usman
+ public | polls_choice                      | table    | usman
+ public | polls_choice_id_seq               | sequence | usman
+ public | polls_poll                        | table    | usman
+ public | polls_poll_id_seq                 | sequence | usman
+ public | todo_datetime                     | table    | usman
+ public | todo_datetime_id_seq              | sequence | usman
+ public | todo_item                         | table    | usman
+ public | todo_item_id_seq                  | sequence | usman
+(31 rows)
+

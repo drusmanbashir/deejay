@@ -1,0 +1,248 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>3. Serving content in multiple languages &mdash; django cms 2.3.4 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.3.4',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="django cms 2.3.4 documentation" href="../index.html" />
+    <link rel="next" title="1. Contributing to django CMS" href="../contribution.html" />
+    <link rel="prev" title="2. How the menu system works" href="menu_system.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../contribution.html" title="1. Contributing to django CMS"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="menu_system.html" title="2. How the menu system works"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">django cms 2.3.4 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="serving-content-in-multiple-languages">
+<h1>3. Serving content in multiple languages<a class="headerlink" href="#serving-content-in-multiple-languages" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="basic-concepts">
+<h2>3.1. Basic concepts<a class="headerlink" href="#basic-concepts" title="Permalink to this headline">¶</a></h2>
+<p>django CMS has a sophisticated multilingual capability. It is able to serve
+content in multiple languages, with fallbacks into other languages where
+translations have not been provided. It also has the facility for the user to set the
+preferred language and so on.</p>
+<div class="section" id="how-django-cms-determines-the-user-s-preferred-language">
+<h3>3.1.1. How django CMS determines the user&#8217;s preferred language<a class="headerlink" href="#how-django-cms-determines-the-user-s-preferred-language" title="Permalink to this headline">¶</a></h3>
+<p>django CMS determines the user&#8217;s language based on (in order of priority):</p>
+<ul class="simple">
+<li>the language code prefix in the URL (but see <a class="reference internal" href="#the-bug"><em>Watch out for the bug</em></a> below)</li>
+<li>the last language the user chose in the language chooser</li>
+<li>the language that the browser says its user prefers</li>
+</ul>
+</div>
+<div class="section" id="how-django-cms-determines-what-language-to-serve">
+<h3>3.1.2. How django CMS determines what language to serve<a class="headerlink" href="#how-django-cms-determines-what-language-to-serve" title="Permalink to this headline">¶</a></h3>
+<p>Once it has identified a user&#8217;s language, it will try to accommodate it using the languages set in <a class="reference internal" href="../getting_started/configuration.html#std:setting-CMS_LANGUAGES"><tt class="xref std std-setting docutils literal"><span class="pre">CMS_LANGUAGES</span></tt></a>.</p>
+<p>If <a class="reference internal" href="../getting_started/configuration.html#std:setting-CMS_LANGUAGE_FALLBACK"><tt class="xref std std-setting docutils literal"><span class="pre">CMS_LANGUAGE_FALLBACK</span></tt></a> is True, and if the user&#8217;s preferred
+language is not available for that content, it will use the fallbacks
+specified for the language in <a class="reference internal" href="../getting_started/configuration.html#std:setting-CMS_LANGUAGE_CONF"><tt class="xref std std-setting docutils literal"><span class="pre">CMS_LANGUAGE_CONF</span></tt></a>.</p>
+</div>
+<div class="section" id="what-django-cms-shows-in-your-menus">
+<h3>3.1.3. What django CMS shows in your menus<a class="headerlink" href="#what-django-cms-shows-in-your-menus" title="Permalink to this headline">¶</a></h3>
+<p>If <a class="reference internal" href="../getting_started/configuration.html#std:setting-CMS_HIDE_UNTRANSLATED"><tt class="xref std std-setting docutils literal"><span class="pre">CMS_HIDE_UNTRANSLATED</span></tt></a> is <tt class="docutils literal"><span class="pre">True</span></tt> (the default) then pages that
+aren&#8217;t translated into the desired language will not appear in the menu.</p>
+</div>
+</div>
+<div class="section" id="follow-an-example">
+<h2>3.2. Follow an example<a class="headerlink" href="#follow-an-example" title="Permalink to this headline">¶</a></h2>
+<p>It helps to understand how the system behaves by stepping through some actual
+examples.</p>
+<ol class="arabic">
+<li><dl class="first docutils">
+<dt>the situation:</dt>
+<dd><ul class="first last simple">
+<li>your browser wants Italian content</li>
+<li>the CMS is set up to provide content in English and Italian</li>
+<li><a class="reference internal" href="../getting_started/configuration.html#std:setting-CMS_HIDE_UNTRANSLATED"><tt class="xref std std-setting docutils literal"><span class="pre">CMS_HIDE_UNTRANSLATED</span></tt></a> is False</li>
+<li>the page <tt class="docutils literal"><span class="pre">/some/page</span></tt></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>you visit <tt class="docutils literal"><span class="pre">/some/page</span></tt></dt>
+<dd><ul class="first last simple">
+<li>the content is served in Italian</li>
+<li>all link URLs (menus etc.) on that page will be prepended with /it</li>
+<li>the page is served at <tt class="docutils literal"><span class="pre">/some/page</span></tt> (i.e. no redirection has taken place)</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>now you select one of those links <tt class="docutils literal"><span class="pre">/it/some/other/page</span></tt> that is available in Italian</dt>
+<dd><ul class="first last simple">
+<li>Italian content is served</li>
+<li>the page is served at <tt class="docutils literal"><span class="pre">/it/some/other/page</span></tt></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>now you select a link to a page <strong>not</strong> available in Italian</dt>
+<dd><ul class="first last simple">
+<li>the link is still <tt class="docutils literal"><span class="pre">/it/some/other/page</span></tt></li>
+<li>you&#8217;ll get the English version, because Italian&#8217;s not available</li>
+<li>the path of the new page is <tt class="docutils literal"><span class="pre">/en/some/other/page</span></tt> (i.e. it has redirected)</li>
+<li>some issues (see <a class="reference internal" href="#the-bug"><em>Watch out for the bug</em></a> below)</li>
+<li>all links on <tt class="docutils literal"><span class="pre">/en/some/other/page</span></tt> are prepended with <tt class="docutils literal"><span class="pre">/en</span></tt> - even if they are available in Italian</li>
+<li>if you now visit <tt class="docutils literal"><span class="pre">/some/page</span></tt> or any other page without using a language prefix, you&#8217;ll get content in English - even though your browser wants Italian</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ol>
+</div>
+<div class="section" id="watch-out-for-the-bug">
+<span id="the-bug"></span><h2>3.3. Watch out for the bug<a class="headerlink" href="#watch-out-for-the-bug" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="what-goes-wrong">
+<h3>3.3.1. What goes wrong<a class="headerlink" href="#what-goes-wrong" title="Permalink to this headline">¶</a></h3>
+<p>As soon as you visit any page with a <tt class="docutils literal"><span class="pre">/en</span></tt> prefix in the path, the system
+sets a <tt class="docutils literal"><span class="pre">django_language</span> <span class="pre">cookie</span></tt> (which will expire when the browser is quit)
+with content &#8220;en&#8221;.</p>
+<p>From now on, the system thinks that you want English content.</p>
+<p>Note that this could have happened:</p>
+<ul class="simple">
+<li>because you chose English in the language selector (good)</li>
+<li>because you arrived at a /en page from a search engine (possibly bad)</li>
+<li>because the page you wanted in Italian redirected you to an English one without warning or choice (bad)</li>
+</ul>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This is an issue the developers are aware of and are working towards fixing.</p>
+</div>
+</div>
+<div class="section" id="what-should-happen">
+<h3>3.3.2. What should happen<a class="headerlink" href="#what-should-happen" title="Permalink to this headline">¶</a></h3>
+<p>Your language cookie should only ever get set or changed if:</p>
+<ul class="simple">
+<li>you choose a language in the language selector</li>
+<li>your browser has asked for a language (but this can&#8217;t override your choice above)</li>
+</ul>
+<p>If your cookie contains a particualar language (say, &#8220;it&#8221;):</p>
+<ul class="simple">
+<li>the content should be served in Italian wherever available</li>
+<li>links on a page should be to <tt class="docutils literal"><span class="pre">/it</span></tt> content where available, and fallback where not</li>
+</ul>
+<p>When visiting a page only available in English:</p>
+<ul class="simple">
+<li>content will have to be in English</li>
+<li>links should be to Italian content where possible</li>
+</ul>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h3><a href="../index.html">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference internal" href="#">3. Serving content in multiple languages</a><ul>
+<li><a class="reference internal" href="#basic-concepts">3.1. Basic concepts</a><ul>
+<li><a class="reference internal" href="#how-django-cms-determines-the-user-s-preferred-language">3.1.1. How django CMS determines the user&#8217;s preferred language</a></li>
+<li><a class="reference internal" href="#how-django-cms-determines-what-language-to-serve">3.1.2. How django CMS determines what language to serve</a></li>
+<li><a class="reference internal" href="#what-django-cms-shows-in-your-menus">3.1.3. What django CMS shows in your menus</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#follow-an-example">3.2. Follow an example</a></li>
+<li><a class="reference internal" href="#watch-out-for-the-bug">3.3. Watch out for the bug</a><ul>
+<li><a class="reference internal" href="#what-goes-wrong">3.3.1. What goes wrong</a></li>
+<li><a class="reference internal" href="#what-should-happen">3.3.2. What should happen</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="menu_system.html"
+                                  title="previous chapter">2. How the menu system works</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="../contribution.html"
+                                  title="next chapter">1. Contributing to django CMS</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="../_sources/concepts/multiple_languages.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="../search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../contribution.html" title="1. Contributing to django CMS"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="menu_system.html" title="2. How the menu system works"
+             >previous</a> |</li>
+        <li><a href="../index.html">django cms 2.3.4 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2009, Patrick Lauber.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

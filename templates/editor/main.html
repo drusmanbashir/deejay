@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+{% include 'editor/header.html' %}
+<div id ="content">
+    <div class ="editors">
+        <div id ="buttonbar">
+            <button id ="pencil_btn">Pencil</button>
+            <button id= "line_btn">Line</button>
+            <button id="text_btn">Text</button>
+            <button id="open_btn">Open File </button>
+
+        </div>
+
+        <!---   <form enctype="multipart/form-data" action = "/editor/contact/" method = "post">{% csrf_token %}
+            <input type = "hidden" id="myImage" name="variable"  value="{{image}}">
+            {{form.as_p}}
+            <input type = "submit" value ="Submit"/>
+        </form>
+        <div id ="progressbar"> </div>
+        <button id="upload_btn">Start </button>
+        <output id="list"></output>
+
+        ---!>
+        <div id="container">
+            <canvas id ="array_canvas" width = "{{ width }}" height="{{ height }}">
+            </canvas>
+            <div id="slider"></div>
+
+            <div id="slider-result">50</div>
+
+        </div>
+        <div id="info"></div>
+
+        </article>
+    </div>
+</div>
+</div>
+</div>
+{% if page.has_previous %}
+<a href="/{{ page.previous_page_number }}/">Previous Page</a>
+{% endif %}
+{% if page.has_next %}
+<a href="/{{ page.next_page_number }}/">Next Page</a>
+{% endif %}
+{% include 'editor/footer.html' %}

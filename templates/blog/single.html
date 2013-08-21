@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+{%load staticfiles %}
+{% include 'blog/header.html' %}
+</div>
+<div id ="content">
+  <article>
+  <h2><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></h2>
+  <h3>{{ post.created}}</h3>
+  <p> 
+  {{ post.body_highlighted|safe }}<br>
+  </p>
+
+  <button id="leftButton" onclick='moveLeft()'>&lt;</button>
+  <button id="rightButton" onclick='moveRight()'>&gt;</button>
+  <div id="galleryContainer">
+    <div id="gallery">
+      <img src= "/static/images/brain-cartoon.jpg"/>
+      {%for imag in images%}
+      <h3>Name :{{media}} {{imag}}</h3><br>
+      <div id="caption">{{imag.image.caption}}</div>
+      {%endfor%}
+    </div>
+    <div id="loading">Please wait..</div>
+  </div>
+  <h3>By {{ post.author }}</h3>
+
+
+  {% load disqus_tags %}
+  <a href="{{ object.get_absolute_url }}#disqus_thread" data-disqus-identifier="{{ object.id }}">View Comments</a>
+  {% disqus_num_replies %}
+  {% set_disqus_url post.get_absolute_url %}
+  <h3>Categories: {% for category in post.categories.all %} {{ category.title }} {% endfor %}</h3>
+
+
+
+  <br />
+  </article>
+  </section>
+</div>
+    </div>
+  </div>
+</div>
+{% if page.has_previous %}
+<a href="/{{ page.previous_page_number }}/">Previous Page</a>
+{% endif %}
+{% if page.has_next %}
+<a href="/{{ page.next_page_number }}/">Next Page</a>
+{% endif %}
+{% include 'blog/footer.html' %}

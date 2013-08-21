@@ -1,0 +1,19 @@
+
+<html>
+ <head>
+ </head>
+ <body>
+  <p>
+I will present a shortrun of what took me hours to figure, hoping that someone else's task somewhere may become easier as a result. I like to keep things short: I assume readers know about GDCM; I will only show a quick, dirty way to create a DICOMDIR file, and hopefully illustrate the relevant portions of the 3 main header files:
+<br>
+<a href="http://gdcm.sourceforge.net/html/classgdcm_1_1Directory.html">GDCM::Directory</a>
+<br>
+<a href="http://gdcm.sourceforge.net/html/classgdcm_1_1DICOMDIRGenerator.html#a24285c192dff899531b4339c210ddfda">GDCM::DICOMDIRGenerator</a>
+<br>
+<a href="http://gdcm.sourceforge.net/html/classgdcm_1_1Writer.html">GDCM::Writer</a>
+<br>
+In essence, to sucessfully create the DICOMDIR, you need to pass the root directory containing DICOM files to the GDCM::DICOMDIRGenerator object as a string, set the appropriate flags (coming below), and call GDCM::DICOMDIRGenerator.Generate(). This will create the necessary meta-data and store the final settings to go into the DICOMDIR file. The actual file is created by calling GDCM::Writer. Check out the flow diagrams below.
+<img src="/home/usman/www/deejay/blog/static/images/dicomdir.png" height="50" width="50" />
+This is it
+</p> </body>
+</html>

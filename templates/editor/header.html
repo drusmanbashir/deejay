@@ -1,0 +1,65 @@
+<!# WORK ON JSON AND WEBSOCKETS !!!!!
+<!DOCTYPE html>
+
+{% load staticfiles %}
+<html lang="en">
+  <head>
+    <script>
+      var width = {{ width }};
+      var size = {{ size }};
+      var imSourc = "{% static "editor/images/beautiful.jpg" %}";
+      var array = {{ dcm_array }};
+    </script>
+    
+    <title>Home Page | Docsmarts.com</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="{% static "reset.css"%}" type="text/css" media="all">
+    <link rel="stylesheet" href="{% static "style.css"%}" type="text/css" media="all">
+    <link rel = "stylesheet" href="{% static "editor/css/flick/jquery-ui-1.10.2.custom.css"%}" type="text/css">
+    <link rel="stylesheet" href="{%static "editor/css/editor.css" %}" type="text/css">
+    <script type="text/javascript" src="{% static "editor/js/jquery-1.9.1.js"%}" ></script>
+    <script type="text/javascript" src="{% static "editor/js/jquery-ui-1.10.2.custom.min.js"%}" ></script>
+    <script type="text/javascript" src="{% static "editor/js/editor.js"%}" ></script>
+
+    <script type="text/javascript" src="{% static "js/cufon-yui.js"%}"></script>
+    <script type="text/javascript" src="{% static "js/Humanst521_BT_400.font.js"%}"></script>
+    <script type="text/javascript" src="{% static "js/Humanst521_Lt_BT_400.font.js"%}"></script>
+    <script type="text/javascript" src="{% static "js/roundabout.js"%}"></script>
+    <script type="text/javascript" src="{% static "js/roundabout_shapes.js"></script>
+    <script type="text/javascript" src="{% static "js/gallery_init.js"%}"></script>
+    <script type="text/javascript" src="{% static "js/cufon-replace.js"%}"></script>
+
+    <!--[if lt IE 7]>
+    <link rel="stylesheet" href="css/ie/ie6.css" type="text/css" media="all">
+    <![endif]-->
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="/static/js/html5.js"></script>
+    <script type="text/javascript" src="/static/js/IE9.js"></script>
+    <![endif]-->
+  </head>
+
+
+  <body>
+
+    <header>
+    <div class="container">
+      <h1><img src="{% static "images/logo.jpg"%}" ><a href="{% url 'latest' %}">DocSmarts</a></h1>
+      <nav>
+      <ul>
+        <li><a href="{%url 'latest' %}" class="current">Home</a></li>
+        <li><a href="media.html">Media</a></li>
+        {% load flatpages%}
+        {% get_flatpages as flatpages%}
+        {%for flatpage in flatpages%}
+        <li><a href="{{flatpage.url}}">{{flatpage.title}}</a></li>
+        {%endfor %}
+      </ul>
+      <a href="/feeds/posts/"><img src="{% static "irss.png"%}" width="50px" height="50px"></a>
+      </nav>
+    </div>
+    </header>
+
+    <div id="main">
+      <div class = "main-box">
+        <div class = "container">    
+          <div class="wrapper">
