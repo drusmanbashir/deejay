@@ -1,6 +1,4 @@
 */deejay/settings.py
 *.pyc
-*/*.pyc
-
+*.dcm
 *~
-*/*~
