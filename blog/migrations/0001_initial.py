@@ -47,28 +47,33 @@ class Migration(SchemaMigration):
         db.create_table(u'blog_image', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('title', self.gf('django.db.models.fields.CharField')(max_length=60, null=True, blank=True)),
-            ('caption', self.gf('django.db.models.fields.TextField')(null=True)),
             ('image', self.gf('django.db.models.fields.files.FileField')(max_length=100)),
+            ('caption', self.gf('django.db.models.fields.TextField')(null=True)),
             ('created', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
-            ('user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'])),
+            ('width', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True)),
+            ('height', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True)),
+            ('user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'], null=True, blank=True)),
+            ('thumbnail2', self.gf('django.db.models.fields.files.ImageField')(max_length=100, null=True, blank=True)),
         ))
         db.send_create_signal(u'blog', ['Image'])
 
-        # Adding M2M table for field posts on 'Image'
-        db.create_table(u'blog_image_posts', (
-            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
-            ('image', models.ForeignKey(orm[u'blog.image'], null=False)),
-            ('post', models.ForeignKey(orm[u'blog.post'], null=False))
-        ))
-        db.create_unique(u'blog_image_posts', ['image_id', 'post_id'])
-
         # Adding M2M table for field tags on 'Image'
-        db.create_table(u'blog_image_tags', (
+        m2m_table_name = db.shorten_name(u'blog_image_tags')
+        db.create_table(m2m_table_name, (
             ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
             ('image', models.ForeignKey(orm[u'blog.image'], null=False)),
             ('tag', models.ForeignKey(orm[u'blog.tag'], null=False))
         ))
-        db.create_unique(u'blog_image_tags', ['image_id', 'tag_id'])
+        db.create_unique(m2m_table_name, ['image_id', 'tag_id'])
+
+        # Adding M2M table for field posts on 'Image'
+        m2m_table_name = db.shorten_name(u'blog_image_posts')
+        db.create_table(m2m_table_name, (
+            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
+            ('image', models.ForeignKey(orm[u'blog.image'], null=False)),
+            ('post', models.ForeignKey(orm[u'blog.post'], null=False))
+        ))
+        db.create_unique(m2m_table_name, ['image_id', 'post_id'])
 
 
     def backwards(self, orm):
@@ -87,11 +92,11 @@ class Migration(SchemaMigration):
         # Deleting model 'Image'
         db.delete_table(u'blog_image')
 
-        # Removing M2M table for field posts on 'Image'
-        db.delete_table('blog_image_posts')
-
         # Removing M2M table for field tags on 'Image'
-        db.delete_table('blog_image_tags')
+        db.delete_table(db.shorten_name(u'blog_image_tags'))
+
+        # Removing M2M table for field posts on 'Image'
+        db.delete_table(db.shorten_name(u'blog_image_posts'))
 
 
     models = {
@@ -140,12 +145,15 @@ class Migration(SchemaMigration):
             'Meta': {'object_name': 'Image'},
             'caption': ('django.db.models.fields.TextField', [], {'null': 'True'}),
             'created': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
+            'height': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'image': ('django.db.models.fields.files.FileField', [], {'max_length': '100'}),
             'posts': ('django.db.models.fields.related.ManyToManyField', [], {'to': u"orm['blog.Post']", 'symmetrical': 'False', 'blank': 'True'}),
             'tags': ('django.db.models.fields.related.ManyToManyField', [], {'to': u"orm['blog.Tag']", 'symmetrical': 'False', 'blank': 'True'}),
+            'thumbnail2': ('django.db.models.fields.files.ImageField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
             'title': ('django.db.models.fields.CharField', [], {'max_length': '60', 'null': 'True', 'blank': 'True'}),
-            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['auth.User']"})
+            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['auth.User']", 'null': 'True', 'blank': 'True'}),
+            'width': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'})
         },
         u'blog.post': {
             'Meta': {'object_name': 'Post'},

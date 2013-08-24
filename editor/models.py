@@ -2,7 +2,16 @@ from django.db import models
 from django import forms
 import numpy as np
 
-class Systems(models.Model) :
+
+class User(models.Model):
+    fn = models.CharField(max_length=10)
+    sn = models.CharField(max_length=10)
+
+
+
+
+
+class Systems(models.Model):
         HN='HN'
         CHEST='CH'
         CNS='CN'
@@ -13,15 +22,15 @@ class Systems(models.Model) :
         VAS='VA'
         BRE='BR'
         which_system=(
-            (HN,'Head & Neck'),
-            (BRE,'Breast'),
-            (CHEST,'Chest'),
-            (CNS,'Neuro'),
-            (MSK,'MSK'),
-            (PAEDS,'Paediatrics'),
-            (GI,'Gastrointestinal'),
-            (GU,'Genitourinary'),
-            (VAS,'Vascular'),
+            (HN, 'Head & Neck'),
+            (BRE, 'Breast'),
+            (CHEST, 'Chest'),
+            (CNS, 'Neuro'),
+            (MSK, 'MSK'),
+            (PAEDS, 'Paediatrics'),
+            (GI, 'Gastrointestinal'),
+            (GU, 'Genitourinary'),
+            (VAS, 'Vascular'),
         )
 
 
@@ -31,12 +40,14 @@ class ContactForm (forms.Form):
     # sender = forms.EmailField()
     #cc_myself = forms.BooleanField(required = False)
     file = forms.FileField() 
-    
+   
+
 class ImageFile (models.Model):
     imageFile = models.FileField(upload_to='uploaded_images/%Y/%m/%d')
 
+
 def Img():
-    a = np.arange(100).reshape(10,10)
+    a = np.arange(100).reshape(10, 10)
     return a
 
 
@@ -48,6 +59,13 @@ class Case(models.Model):
     system = models.CharField(max_length=2,
                             choices=Systems.which_system,
                             #default=CHEST
-                            )
-    #user = models.ManyToManyField(User, blank=True, null=True, through='UserToAuthor')
+                              )
+    user = models.ManyToManyField(User, blank=True, null=True, through='UserToCase')
 
+    def __unicode__(self):
+        return self.title
+
+
+class UserToCase(models.Model):
+    case=models.ForeignKey(Case)
+    user=models.ForeignKey(User)

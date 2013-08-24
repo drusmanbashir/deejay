@@ -1,5 +1,4 @@
 import time
-from settings import MEDIA_URL
 from calendar import month_name
 from django.shortcuts import render_to_response
 from django.core.paginator import Paginator, EmptyPage
@@ -48,7 +47,7 @@ def getLatestPost (request):
   except Post.DoesNotExist:
     raise Http404
   return render_to_response("blog/single.html", {
-                                            'media_url':MEDIA_URL,
+                                       #     'media_url':MEDIA_URL,
                                             'post':post, 
                                             'images':images,
                                             'user':request.user,
