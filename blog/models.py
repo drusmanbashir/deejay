@@ -7,7 +7,6 @@ from django.core.files import File
 from string import join
 import os
 from PIL import Image as PImage
-from settings import MEDIA_ROOT
 from os.path import join as pjoin
 from tempfile import *
 
