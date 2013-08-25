@@ -2,6 +2,7 @@ from django.db import models
 from django import forms
 import numpy as np
 from django.conf import settings
+import os
 
 
 class User(models.Model):
@@ -59,6 +60,14 @@ class Case(models.Model):
 
     def __unicode__(self):
         return self.title
+
+    def validate(self):
+        final = os.path.join(settings.MEDIA_URL, self.folder)
+        dirs = []
+        for x in os.walk(self.folder):
+            dirs.append((x[0], x[2]))
+
+        return dirs
 
 
 class UserToCase(models.Model):
