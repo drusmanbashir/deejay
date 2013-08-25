@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib import admin
 from django.contrib.auth.models import User
 from markdown import markdown
-from bs4  import BeautifulSoup
+from bs4 import BeautifulSoup
 from django.core.files import File
 from string import join
 import os
@@ -16,20 +16,20 @@ class Category(models.Model):
     slug = models.SlugField(max_length=40, db_index=True)
 
     class Meta:
-      verbose_name_plural = "Categories"
+        verbose_name_plural = "Categories"
 
     def __unicode__(self):
-      return self.title
-    
+        return self.title
+
     def get_absolute_url(self):
-      return "/categories/%s/" % self.slug
+        return "/categories/%s/" % self.slug
 
 
 class Post(models.Model):
     title = models.CharField(max_length=100, unique=True)
     slug = models.SlugField(max_length=40, unique=True)
     body = models.TextField()
-    body_highlighted = models.TextField(editable=False, blank = True)
+    body_highlighted = models.TextField(editable=False, blank=True)
     created = models.DateField(db_index=True, auto_now_add=True)
     categories = models.ManyToManyField(Category, blank=True, null=True, through='CategoryToPost')
 
@@ -38,26 +38,27 @@ class Post(models.Model):
         lst = ["<a href='/media/%s'>%s</a>" % (x, x.split('/')[-1]) for x in lst]
         return join(lst, ', ')
     images.allow_tags = True
+
     class Meta:
-      get_latest_by = "created"
+        get_latest_by = "created"
 
     author = models.ForeignKey(User)
+
     def __unicode__(self):
-      return self.title
+        return self.title
 
     def get_absolute_url(self):
-      return "/blog/%s/%s/%s" % (self.created.year,self.created.month,self.slug)
+        return "/blog/%s/%s/%s" % (self.created.year, self.created.month, self.slug)
 
     def save(self):
-      self.body_highlighted = self.highlight_code(self.body)
-      super(Post,self).save()
+        self.body_highlighted = self.highlight_code(self.body)
+        super(Post, self).save()
 
-
-    def highlight_code (self, html):
-      soup = BeautifulSoup(html)
-      preblocks = soup.findAll('pre')
-      for pre in preblocks:
-        if pre.has_key('class'):
+    def highlight_code(self, html):
+        soup = BeautifulSoup(html)
+        preblocks = soup.findAll('pre')
+        for pre in preblocks:
+            if pre.has_key('class'):
                 try:
                     code = ''.join([unicode(item) for item in pre.contents])
                     code = self.unescape_html(code)
@@ -67,27 +68,28 @@ class Post(models.Model):
                     pre.replaceWith(BeautifulSoup(code_hl))
                 except:
                     pass
-      return unicode(soup)
+        return unicode(soup)
 
 def unescape_html(self, html):
-      html = html.replace('&lt;', '<')
-      html = html.replace('&gt;', '>')
-      html = html.replace('&amp;', '&')
-      return html
+    html = html.replace('&lt;', '<')
+    html = html.replace('&gt;', '>')
+    html = html.replace('&amp;', '&')
+    return html
 
 class CategoryToPost(models.Model):
     post = models.ForeignKey(Post)
     category = models.ForeignKey(Category)
 
 class Tag (models.Model):
-  tag = models.CharField(max_length=60)
-  def __unicode__(self):
-    return self.tag
+    tag = models.CharField(max_length=60)
+
+    def __unicode__(self):
+        return self.tag
 
 class Image(models.Model):
     title = models.CharField(max_length=60, blank=True, null=True)
     image = models.FileField(upload_to="images/")
-    caption=models.TextField(null=True)
+    caption = models.TextField(null=True)
     tags = models.ManyToManyField(Tag, blank=True)
     posts = models.ManyToManyField(Post, blank=True)
     created = models.DateTimeField(auto_now_add=True)
@@ -100,11 +102,10 @@ class Image(models.Model):
    
     thumbnail2 = models.ImageField(upload_to="images/", blank=True, null=True)
 
-
-
     def size(self):
         """Image size."""
         return "%s x %s" % (self.width, self.height)
+
     def __unicode__(self):
         return self.image.name
 
@@ -120,3 +121,32 @@ class Image(models.Model):
         return """<a href="/media/%s"><img border="0" alt="" src="/media/%s" height="40" /></a>""" % (
                                                                     (self.image.name, self.image.name))
     thumbnail.allow_tags = True
+
+
+class Publisher(models.Model):
+    name = models.CharField(max_length=30)
+    address = models.CharField(max_length=50)
+    city = models.CharField(max_length=60)
+    state_province = models.CharField(max_length=30)
+    country = models.CharField(max_length=50)
+    website = models.URLField()
+
+    def __unicode__(self):
+        return self.name
+
+class Author(models.Model):
+    first_name = models.CharField(max_length=30)
+    last_name = models.CharField(max_length=40)
+    email = models.EmailField()
+
+    def __unicode__(self):
+        return u'%s %s' % (self.first_name, self.last_name)
+
+class Book(models.Model):
+    title = models.CharField(max_length=100)
+    authors = models.ManyToManyField(Author)
+    publisher = models.ForeignKey(Publisher)
+    publication_date = models.DateField()
+
+    def __unicode__(self):
+        return self.title

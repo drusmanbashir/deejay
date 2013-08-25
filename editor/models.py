@@ -1,14 +1,12 @@
 from django.db import models
 from django import forms
 import numpy as np
+from django.conf import settings
 
 
 class User(models.Model):
     fn = models.CharField(max_length=10)
     sn = models.CharField(max_length=10)
-
-
-
 
 
 class Systems(models.Model):
@@ -42,10 +40,6 @@ class ContactForm (forms.Form):
     file = forms.FileField() 
    
 
-class ImageFile (models.Model):
-    imageFile = models.FileField(upload_to='uploaded_images/%Y/%m/%d')
-
-
 def Img():
     a = np.arange(100).reshape(10, 10)
     return a
@@ -60,6 +54,7 @@ class Case(models.Model):
                             choices=Systems.which_system,
                             #default=CHEST
                               )
+    folder = models.CharField(max_length=20)
     user = models.ManyToManyField(User, blank=True, null=True, through='UserToCase')
 
     def __unicode__(self):
@@ -67,5 +62,14 @@ class Case(models.Model):
 
 
 class UserToCase(models.Model):
-    case=models.ForeignKey(Case)
-    user=models.ForeignKey(User)
+    case = models.ForeignKey(Case)
+    user = models.ForeignKey(User)
+
+
+class ImageFile (models.Model):
+    imageFile = models.FileField(upload_to='uploaded_images/%Y/%m/%d')
+    annotations_path = models.CharField(max_length=100)
+    case = models.ForeignKey(Case)
+
+
+#final = normpath(join(settings.MEDIA_ROOT,c.folder))
