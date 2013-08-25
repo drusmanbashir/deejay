@@ -1,8 +1,7 @@
 */deejay/settings.py
 *.pyc
 */*.pyc
-*.db
 *~
 */*~
 *vim
-*/migrations/
+*dcm
