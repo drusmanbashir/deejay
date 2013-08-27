@@ -19,6 +19,16 @@ def Imag():
     return info 
 
 
+def gdcm_PIL(filename):
+    r = gdcm.ImageReader()
+    r.SetFileName(filename)
+    if not r.Read():
+        print ("ERROR")
+        sys.exit(1)
+    arra = gdcm_to_numpy(r.GetImage())
+
+
+
 def defaultView(request):
     data = dicom.read_file("media/images/cor.dcm")
     data2 = dicom.read_file("media/images/cor2.dcm")
