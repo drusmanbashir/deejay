@@ -1,0 +1,100 @@
+$(document).ready(function(){
+  $('#fileOpen_dialog').dialog({
+    autoOpen : false
+
+  });
+  $('#buttonbar').buttonset();
+  $('#pencil_btn').click(function()
+  {
+    pencil();
+  }
+  );
+  $('#open_btn').click(function(){
+    fileOpen();
+  });
+ $( "#slider" ).slider();
+  $('.selector').slider({
+    animate: true,
+    max:50, 
+    orientation:"vertical"
+
+  });
+
+  var canvas = document.getElementById('imageView');
+ // var sources = document.getElementById("myImage").value;
+ var sources = document.getElementById('myImage').value;
+  var context = canvas.getContext('2d');
+  var imageObj = new Image();
+  imageObj.onload = function(){
+    context.drawImage(this,0,0);
+  }
+  imageObj.src=sources;
+
+});          
+
+
+function pencil() {
+  alert ("Yo that worked!");
+}
+
+
+if(window.addEventListener) {
+  window.addEventListener('load', function () {
+    var canvas, context;
+
+    // Initialization sequence.
+    function init () {
+      // Find the canvas element.
+
+      canvas = document.getElementById('imageView');
+      if (!canvas) {
+        alert('Error: I cannot find the canvas element!');
+        return;
+      }
+
+      if (!canvas.getContext) {
+        alert('Error: no canvas.getContext!');
+        return;
+      }
+
+      // Get the 2D canvas context.
+      context = canvas.getContext('2d');
+      if (!context) {
+        alert('Error: failed to getContext!');
+        return;
+      }
+      //tool = new tool_pencil();
+      //  canvas.addEventListener('mousedown',ev_canvas,false);
+      // canvas.addEventListener('mousemove',ev_canvas,false);
+      // canvas.addEventListener('mouseup',ev_canvas,false);
+      // Attach the mousemove event handler.
+    }
+
+    // The mousemove event handler.
+    var started = false;
+    function ev_mousemove (ev) {
+      var x, y;
+
+      // Get the mouse position relative to the canvas element.
+      if (ev.layerX || ev.layerX == 0) { // Firefox
+        x = ev.layerX;
+        y = ev.layerY;
+      } else if (ev.offsetX || ev.offsetX == 0) { // Opera
+        x = ev.offsetX;
+        y = ev.offsetY;
+      }
+
+      // The event handler works like a drawing pencil which tracks the mouse 
+      // movements. We start drawing a path made up of lines.
+      if (!started) {
+        context.beginPath();
+        context.moveTo(x, y);
+        started = true;
+      } else {
+        context.lineTo(x, y);
+        context.stroke();
+      }
+    }
+
+    init();
+  }, false); }
