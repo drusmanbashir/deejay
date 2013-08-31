@@ -17,12 +17,9 @@ class CaseAdmin(admin.ModelAdmin):
     fields = ['title', 'description', 'system', 'folder', 'dirTree', ]
     exclude = ('user',)
     inlines = [UserToCaseInline,
-            ImageInline]
+           # ImageInline
+            ]
 
-    def changelist_view(self, request, extra_context=None):
-        extra_context = extracontext or {}
-        extra_context['arrays'] = self.dirTree
-        return super(CaseAdmin, self).changelist_view(request, extra_context=extra_context)
 
 
 admin.site.register(models.Case, CaseAdmin)

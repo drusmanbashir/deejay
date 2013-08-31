@@ -1,6 +1,7 @@
-*/deejay/settings.py
+*swp
 *.pyc
 */*.pyc
+*/*/*.pyc
 *~
 */*~
 *vim
