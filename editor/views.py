@@ -133,5 +133,5 @@ def show_PIL(dataset, width='xx', level='xx'):
 
         else:
                 image = getLUT(dataset.pixel_array, width, level)
-                im = Image.fromarray(image).convert('L')  # Convert mode to L since LUT has only 256 values: http://www.pythonware.com/library/pil/handbook/image.htm
+                #im = Image.fromarray(image).convert('L')  # Convert mode to L since LUT has only 256 values: http://www.pythonware.com/library/pil/handbook/image.htm
         return image

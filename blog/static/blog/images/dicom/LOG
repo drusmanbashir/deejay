@@ -1,0 +1,4 @@
+#! /usr/bin/env bash
+#renaming filess
+
+find .  -type f ! -name '*.dcm' -exec mv '{}' ~/code/dicom/LOG \;

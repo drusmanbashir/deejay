@@ -76,7 +76,7 @@ STATIC_ROOT = normpath(join(DJANGO_ROOT, 'static'))
 # URL prefix for static files.
 STATIC_URL = '/static/'
 
-# URL prefix for admin static files -- CSS, JavaScript and images.
+# URL prefix for admin static files -- CSS, JavaScript and images.DMID
 ADMIN_MEDIA_PREFIX = '/static/admin/'
 
 # Additional locations of static files.

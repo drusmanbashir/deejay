@@ -5,6 +5,8 @@ from django.conf import settings
 from unidecode import unidecode
 import os
 import gdcm
+import dicom
+from PIL import Image
 
 
 class User(models.Model):
@@ -93,7 +95,13 @@ def getLUT(data, window, level):
         return chacha
 
 
-def dcmToArray(dataset, width='xx', level='xx'):
+def rawArray(filePath):
+    dataset = dicom.read_file(filePath)
+    return dataset.pixel_array
+
+
+def dcmToArray(filePath, width='xx', level='xx'):
+        dataset = dicom.read_file(filePath)
         if (width == 'xx'):
                 width = dataset.WindowWidth
                 level = dataset.WindowCenter
@@ -114,13 +122,13 @@ def dcmToArray(dataset, width='xx', level='xx'):
 
                 # PIL size = (width, height)
                 size = (dataset.Columns, dataset.Rows)
-                print ("The mode is %s, size is %s",mode,size)
+                print ("The mode is %s, size is %s", mode, size)
 
                 im = Image.frombuffer(mode, size, dataset.PixelData, "raw", mode, 0, 1)  # Recommended to specify all details by http://www.pythonware.com/library/pil/handbook/image.htm
 
         else:
                 image = getLUT(dataset.pixel_array, width, level)
-                im = Image.fromarray(image).convert('L')  # Convert mode to L since LUT has only 256 values: http://www.pythonware.com/library/pil/handbook/image.htm
+               # im = Image.fromarray(image).convert('L')  # Convert mode to L since LUT has only 256 values: http://www.pythonware.com/library/pil/handbook/image.htm
         return image
 
 def validate(r, file):

@@ -1,0 +1,23 @@
+!_TAG_FILE_FORMAT	2	/extended format/
+!_TAG_FILE_SORTED	0	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Patrick Walton	/pwalton@mozilla.com/
+!_TAG_PROGRAM_NAME	jsctags	//
+!_TAG_PROGRAM_URL	http://github.com/pcwalton/jsctags	/GitHub repository/
+!_TAG_PROGRAM_VERSION	0.1	//
+%anonymous_function	js/canvas.js	/^\$(document).ready(function(){$/;"	f	lineno:1	type:void function()
+%anonymous_function	js/editor.js	/^\$(document).ready(function(){$/;"	f	lineno:1	type:void function()
+imagePut	js/editor.js	/^function imagePut(ev){$/;"	f	lineno:16	type:void function(any)
+imageManipulate	js/editor.js	/^function imageManipulate(){$/;"	f	lineno:28	type:void function()
+%anonymous_function	js/json_parse.js	/^var json_parse = (function () {$/;"	f	lineno:53	type:<number | string | boolean | null | Array | Object> function(any, any) function()
+json_parse	js/json_parse.js	/^var json_parse = (function () {$/;"	v	lineno:53	type:<number | string | boolean | null | Array | Object> function(any, any)
+error	js/json_parse.js	/^        error = function (m) {$/;"	f	lineno:78	type:void function(string)
+next	js/json_parse.js	/^        next = function (c) {$/;"	f	lineno:90	type:string function(<string | undefined>)
+number	js/json_parse.js	/^        number = function () {$/;"	f	lineno:106	type:number function()
+string	js/json_parse.js	/^        string = function () {$/;"	f	lineno:147	type:string function()
+white	js/json_parse.js	/^        white = function () {$/;"	f	lineno:189	type:void function()
+word	js/json_parse.js	/^        word = function () {$/;"	f	lineno:198	type:<boolean | null> function()
+array	js/json_parse.js	/^        array = function () {$/;"	f	lineno:228	type:Array function()
+object	js/json_parse.js	/^        object = function () {$/;"	f	lineno:255	type:Object function()
+value	js/json_parse.js	/^    value = function () {$/;"	f	lineno:289	type:<number | string | boolean | null | Array | Object> function()
+%anonymous_function	js/json_parse.js	/^    return function (source, reviver) {$/;"	f	lineno:312	type:<number | string | boolean | null | Array | Object> function(any, any)
+walk	js/json_parse.js	/^            ? (function walk(holder, key) {$/;"	f	lineno:331	type:any function(<number | string | boolean | undefined | null | Array | Object>, string)
