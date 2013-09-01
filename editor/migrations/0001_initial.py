@@ -27,12 +27,31 @@ class Migration(SchemaMigration):
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('title', self.gf('django.db.models.fields.CharField')(max_length=100, db_index=True)),
             ('description', self.gf('django.db.models.fields.CharField')(max_length=300, db_index=True)),
+            ('dirTree', self.gf('django.db.models.fields.TextField')(blank=True)),
             ('created', self.gf('django.db.models.fields.DateField')(auto_now_add=True, db_index=True, blank=True)),
             ('information', self.gf('django.db.models.fields.CharField')(max_length=100, db_index=True)),
             ('system', self.gf('django.db.models.fields.CharField')(max_length=2)),
             ('folder', self.gf('django.db.models.fields.CharField')(max_length=20)),
+            ('folder_array', self.gf('django.db.models.fields.CharField')(max_length=20, null=True, blank=True)),
         ))
         db.send_create_signal(u'editor', ['Case'])
+
+        # Adding model 'FilePath'
+        db.create_table(u'editor_filepath', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('path', self.gf('django.db.models.fields.CharField')(max_length=100)),
+            ('folder', self.gf('django.db.models.fields.CharField')(max_length=100)),
+        ))
+        db.send_create_signal(u'editor', ['FilePath'])
+
+        # Adding M2M table for field case on 'FilePath'
+        m2m_table_name = db.shorten_name(u'editor_filepath_case')
+        db.create_table(m2m_table_name, (
+            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
+            ('filepath', models.ForeignKey(orm[u'editor.filepath'], null=False)),
+            ('case', models.ForeignKey(orm[u'editor.case'], null=False))
+        ))
+        db.create_unique(m2m_table_name, ['filepath_id', 'case_id'])
 
         # Adding model 'UserToCase'
         db.create_table(u'editor_usertocase', (
@@ -62,6 +81,12 @@ class Migration(SchemaMigration):
         # Deleting model 'Case'
         db.delete_table(u'editor_case')
 
+        # Deleting model 'FilePath'
+        db.delete_table(u'editor_filepath')
+
+        # Removing M2M table for field case on 'FilePath'
+        db.delete_table(db.shorten_name(u'editor_filepath_case'))
+
         # Deleting model 'UserToCase'
         db.delete_table(u'editor_usertocase')
 
@@ -74,12 +99,21 @@ class Migration(SchemaMigration):
             'Meta': {'object_name': 'Case'},
             'created': ('django.db.models.fields.DateField', [], {'auto_now_add': 'True', 'db_index': 'True', 'blank': 'True'}),
             'description': ('django.db.models.fields.CharField', [], {'max_length': '300', 'db_index': 'True'}),
+            'dirTree': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
             'folder': ('django.db.models.fields.CharField', [], {'max_length': '20'}),
+            'folder_array': ('django.db.models.fields.CharField', [], {'max_length': '20', 'null': 'True', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'information': ('django.db.models.fields.CharField', [], {'max_length': '100', 'db_index': 'True'}),
             'system': ('django.db.models.fields.CharField', [], {'max_length': '2'}),
             'title': ('django.db.models.fields.CharField', [], {'max_length': '100', 'db_index': 'True'}),
             'user': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': u"orm['editor.User']", 'null': 'True', 'through': u"orm['editor.UserToCase']", 'blank': 'True'})
+        },
+        u'editor.filepath': {
+            'Meta': {'object_name': 'FilePath'},
+            'case': ('django.db.models.fields.related.ManyToManyField', [], {'to': u"orm['editor.Case']", 'symmetrical': 'False'}),
+            'folder': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'path': ('django.db.models.fields.CharField', [], {'max_length': '100'})
         },
         u'editor.imagefile': {
             'Meta': {'object_name': 'ImageFile'},

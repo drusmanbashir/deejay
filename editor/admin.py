@@ -10,14 +10,20 @@ class UserToCaseInline(admin.TabularInline):
     model = models.UserToCase
     extra = 0
 
+class CaseToFileInline(admin.TabularInline):
+    model = models.CaseToFile
+    extra = 0
+
+
 class ImageInline(admin.TabularInline):
     model = models.ImageFile
 
 
 class CaseAdmin(admin.ModelAdmin):
-    fields = ['title', 'description', 'system', 'folder', 'dirTree', ]
-    exclude = ('user',)
+    fields = ['title', 'description', 'system', 'folder', 'dirTree',  ]
+    exclude = ('user', 'files')
     inlines = [UserToCaseInline,
+            CaseToFileInline,
            # ImageInline
     ]
 

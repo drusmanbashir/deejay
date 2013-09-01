@@ -1,7 +1,6 @@
 from django.db import models
 from django import forms
 import numpy as np
-from django.conf import settings
 from unidecode import unidecode
 import os
 import gdcm
@@ -42,18 +41,30 @@ class ContactForm (forms.Form):
     # message = forms.CharField()
     # sender = forms.EmailField()
     #cc_myself = forms.BooleanField(required = False)
-    file = forms.FileField() 
-   
+    file = forms.FileField()
 
 def Img():
     a = np.arange(100).reshape(10, 10)
     return a
 
+class FilePath(models.Model):
+    path = models.CharField(max_length=100)
+    folder = models.CharField(max_length=100)
+
+    def __unicode__(self):
+        return self.path
+
+    class Meta:
+        ordering = ('path',)
+
+    def save(self):
+        self.folder = os.path.dirname(self.path)
+        super(FilePath, self).save()
 
 class Case(models.Model):
     title = models.CharField(max_length=100, db_index=True)
     description = models.CharField(max_length=300, db_index=True)
-    dirTree = models.CharField(max_length=300, db_index=True, blank=True)
+    dirTree = models.TextField(blank=True)
     created = models.DateField(db_index=True, auto_now_add=True)
     information = models.CharField(max_length=100, db_index=True)
     system = models.CharField(max_length=2,
@@ -61,6 +72,8 @@ class Case(models.Model):
                             #default=CHEST
                               )
     folder = models.CharField(max_length=20)
+    files = models.ManyToManyField(FilePath, blank=True, null=True, through='CaseToFile')
+    folder_array = models.CharField(max_length=20, blank=True, null=True)
     user = models.ManyToManyField(User, blank=True, null=True, through='UserToCase')
 
     def __unicode__(self):
@@ -77,11 +90,22 @@ class Case(models.Model):
             for size in range(len(dirs)):
                 for x in range(len(dirs[size][1])):
                     dirs[size][1][x] = unidecode(os.path.join(dirs[size][0], dirs[size][1][x]))
+                    if validate(r, dirs[size][1][x]):
+                        data = dicom.read_file(dirs[size][1][x])
+                        array = dcmToArray(data)
+                        np.save((dirs[size][1][x] + "light"), array)
+                        array = rawArray(data)
+                        np.save(dirs[size][1][x], array)
+                        filePath = FilePath(path=(dirs[size][1][x] + ".npy"))
+                        filePath.save()
+                        rel = CaseToFile(case=self,
+                                file=filePath)
+                        rel.save()
                 newDir.append((dirs[size][0], [x for x in dirs[size][1] if validate(r, x)]))
         else:
             print ("PATH NOT EXISTS ! ")
         return newDir
-      
+
     def save(self):
         self.dirTree = self.parseDir()
         super(Case, self).save()
@@ -95,13 +119,11 @@ def getLUT(data, window, level):
         return chacha
 
 
-def rawArray(filePath):
-    dataset = dicom.read_file(filePath)
+def rawArray(dataset):
     return dataset.pixel_array
 
 
-def dcmToArray(filePath, width='xx', level='xx'):
-        dataset = dicom.read_file(filePath)
+def dcmToArray(dataset, width='xx', level='xx'):
         if (width == 'xx'):
                 width = dataset.WindowWidth
                 level = dataset.WindowCenter
@@ -132,13 +154,21 @@ def dcmToArray(filePath, width='xx', level='xx'):
         return image
 
 def validate(r, file):
+    x = False
     r.SetFileName(file)
-    return r.CanRead()
+    if r.CanRead():
+        data = dicom.read_file(file)
+        x = "WindowWidth" in data
+    return x
 
 
 class UserToCase(models.Model):
     case = models.ForeignKey(Case)
     user = models.ForeignKey(User)
+
+class CaseToFile(models.Model):
+    case = models.ForeignKey(Case)
+    file = models.ForeignKey(FilePath)
 
 
 class ImageFile (models.Model):

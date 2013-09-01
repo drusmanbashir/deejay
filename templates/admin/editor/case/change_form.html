@@ -35,7 +35,6 @@
   </ul>
 {% endif %}{% endif %}
 {% endblock %}
-HOWDY <BR><br>
 <div id="user_def">
 </div>
 <form {% if has_file_field %}enctype="multipart/form-data" {% endif %}action="{{ form_url }}" method="post" id="{{ opts.module_name }}_form">{% csrf_token %}{% block form_top %}{% endblock %}
