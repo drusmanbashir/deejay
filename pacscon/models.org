@@ -1,0 +1,698 @@
+# This is an auto-generated Django model module.
+# You'll have to do the following manually to clean this up:
+#     * Rearrange models' order
+#     * Make sure each model has one field with primary_key=True
+# Feel free to rename the models, but don't rename db_table values or field names.
+#
+# Also note: You'll have to insert the output of 'django-admin.py sqlcustom [appname]'
+# into your database.
+from __future__ import unicode_literals
+
+from django.db import models
+
+class Ae(models.Model):
+    pk = models.BigIntegerField(primary_key=True)
+    aet = models.TextField(unique=True)
+    hostname = models.TextField()
+    port = models.IntegerField()
+    cipher_suites = models.TextField(blank=True)
+    pat_id_issuer = models.TextField(blank=True)
+    acc_no_issuer = models.TextField(blank=True)
+    user_id = models.TextField(blank=True)
+    passwd = models.TextField(blank=True)
+    fs_group_id = models.TextField(blank=True)
+    ae_group = models.TextField(blank=True)
+    ae_desc = models.TextField(blank=True)
+    wado_url = models.TextField(blank=True)
+    station_name = models.TextField(blank=True)
+    institution = models.TextField(blank=True)
+    department = models.TextField(blank=True)
+    installed = models.BooleanField()
+    vendor_data = models.TextField(blank=True) # This field type is a guess.
+    class Meta:
+        db_table = 'ae'
+
+class Code(models.Model):
+    pk = models.BigIntegerField(primary_key=True)
+    code_value = models.TextField()
+    code_designator = models.TextField()
+    code_version = models.TextField(blank=True)
+    code_meaning = models.TextField(blank=True)
+    class Meta:
+        db_table = 'code'
+
+class ContentItem(models.Model):
+    pk = models.BigIntegerField(primary_key=True)
+    instance_fk = models.ForeignKey('Instance', null=True, db_column='instance_fk', blank=True)
+    name_fk = models.ForeignKey(Code, null=True, db_column='name_fk', blank=True)
+    code_fk = models.ForeignKey(Code, null=True, db_column='code_fk', blank=True)
+    rel_type = models.TextField(blank=True)
+    text_value = models.TextField(blank=True)
+    class Meta:
+        db_table = 'content_item'
+
+class Device(models.Model):
+    pk = models.BigIntegerField(primary_key=True)
+    station_name = models.TextField(unique=True)
+    station_aet = models.TextField()
+    modality = models.TextField()
+    class Meta:
+        db_table = 'device'
+
+class Files(models.Model):
+    pk = models.BigIntegerField(primary_key=True)
+    instance_fk = models.ForeignKey('Instance', null=True, db_column='instance_fk', blank=True)
+    filesystem_fk = models.ForeignKey('Filesystem', null=True, db_column='filesystem_fk', blank=True)
+    filepath = models.TextField()
+    file_tsuid = models.TextField()
+    file_md5 = models.TextField(blank=True)
+    file_size = models.BigIntegerField(null=True, blank=True)
+    file_status = models.IntegerField(null=True, blank=True)
+    md5_check_time = models.DateTimeField(null=True, blank=True)
+    created_time = models.DateTimeField(null=True, blank=True)
+    class Meta:
+        db_table = 'files'
+
+class Filesystem(models.Model):
+    pk = models.BigIntegerField(primary_key=True)
+    next_fk = models.ForeignKey(''self'', null=True, db_column='next_fk', blank=True)
+    dirpath = models.TextField(unique=True)
+    fs_group_id = models.TextField()
+    retrieve_aet = models.TextField()
+    availability = models.IntegerField()
+    fs_status = models.IntegerField()
+    user_info = models.TextField(blank=True)
+    class Meta:
+        db_table = 'filesystem'
+
+class Gppps(models.Model):
+    pk = models.BigIntegerField(primary_key=True)
+    patient_fk = models.ForeignKey('Patient', null=True, db_column='patient_fk', blank=True)
+    pps_iuid = models.TextField(unique=True)
+    pps_start = models.DateTimeField(null=True, blank=True)
+    pps_status = models.IntegerField()
+    created_time = models.DateTimeField(null=True, blank=True)
+    updated_time = models.DateTimeField(null=True, blank=True)
+    pps_attrs = models.TextField(blank=True) # This field type is a guess.
+    class Meta:
+        db_table = 'gppps'
+
+class Gpsps(models.Model):
+    pk = models.BigIntegerField(primary_key=True)
+    patient_fk = models.ForeignKey('Patient', null=True, db_column='patient_fk', blank=True)
+    code_fk = models.ForeignKey(Code, null=True, db_column='code_fk', blank=True)
+    gpsps_iuid = models.TextField(unique=True)
+    gpsps_tuid = models.TextField(blank=True)
+    start_datetime = models.DateTimeField()
+    end_datetime = models.DateTimeField(null=True, blank=True)
+    gpsps_status = models.IntegerField(null=True, blank=True)
+    gpsps_prior = models.IntegerField(null=True, blank=True)
+    in_availability = models.IntegerField(null=True, blank=True)
+    item_attrs = models.TextField(blank=True) # This field type is a guess.
+    class Meta:
+        db_table = 'gpsps'
+
+class GpspsPerf(models.Model):
+    pk = models.BigIntegerField(primary_key=True)
+    gpsps_fk = models.ForeignKey(Gpsps, null=True, db_column='gpsps_fk', blank=True)
+    code_fk = models.ForeignKey(Code, null=True, db_column='code_fk', blank=True)
+    human_perf_name = models.TextField(blank=True)
+    hum_perf_fn_sx = models.TextField(blank=True)
+    hum_perf_gn_sx = models.TextField(blank=True)
+    hum_perf_i_name = models.TextField(blank=True)
+    hum_perf_p_name = models.TextField(blank=True)
+    class Meta:
+        db_table = 'gpsps_perf'
+
+class GpspsReq(models.Model):
+    pk = models.BigIntegerField(primary_key=True)
+    gpsps_fk = models.ForeignKey(Gpsps, null=True, db_column='gpsps_fk', blank=True)
+    req_proc_id = models.TextField(blank=True)
+    accession_no = models.TextField(blank=True)
+    class Meta:
+        db_table = 'gpsps_req'
+
+class Hp(models.Model):
+    pk = models.BigIntegerField(primary_key=True)
+    user_fk = models.ForeignKey(Code, null=True, db_column='user_fk', blank=True)
+    hp_iuid = models.TextField(unique=True)
+    hp_cuid = models.TextField(blank=True)
+    hp_name = models.TextField(blank=True)
+    hp_group = models.TextField(blank=True)
+    hp_level = models.IntegerField(null=True, blank=True)
+    num_priors = models.IntegerField(null=True, blank=True)
+    num_screens = models.IntegerField(null=True, blank=True)
+    hp_attrs = models.TextField(blank=True) # This field type is a guess.
+    class Meta:
+        db_table = 'hp'
+
+class Hpdef(models.Model):
+    pk = models.BigIntegerField(primary_key=True)
+    hp_fk = models.ForeignKey(Hp, null=True, db_column='hp_fk', blank=True)
+    modality = models.TextField(blank=True)
+    laterality = models.TextField(blank=True)
+    class Meta:
+        db_table = 'hpdef'
+
+class Instance(models.Model):
+    pk = models.BigIntegerField(primary_key=True)
+    series_fk = models.ForeignKey('Series', null=True, db_column='series_fk', blank=True)
+    srcode_fk = models.ForeignKey(Code, null=True, db_column='srcode_fk', blank=True)
+    media_fk = models.ForeignKey('Media', null=True, db_column='media_fk', blank=True)
+    sop_iuid = models.TextField(unique=True)
+    sop_cuid = models.TextField()
+    inst_no = models.TextField(blank=True)
+    content_datetime = models.DateTimeField(null=True, blank=True)
+    sr_complete = models.TextField(blank=True)
+    sr_verified = models.TextField(blank=True)
+    inst_custom1 = models.TextField(blank=True)
+    inst_custom2 = models.TextField(blank=True)
+    inst_custom3 = models.TextField(blank=True)
+    ext_retr_aet = models.TextField(blank=True)
+    retrieve_aets = models.TextField(blank=True)
+    availability = models.IntegerField()
+    inst_status = models.IntegerField()
+    all_attrs = models.BooleanField()
+    commitment = models.BooleanField()
+    archived = models.BooleanField()
+    created_time = models.DateTimeField(null=True, blank=True)
+    updated_time = models.DateTimeField(null=True, blank=True)
+    inst_attrs = models.TextField(blank=True) # This field type is a guess.
+    class Meta:
+        db_table = 'instance'
+
+class Issuer(models.Model):
+    pk = models.BigIntegerField(primary_key=True)
+    entity_id = models.TextField(unique=True, blank=True)
+    entity_uid = models.TextField(blank=True)
+    entity_uid_type = models.TextField(blank=True)
+    class Meta:
+        db_table = 'issuer'
+
+class JbmCounter(models.Model):
+    name = models.CharField(max_length=255, primary_key=True)
+    next_id = models.BigIntegerField(null=True, blank=True)
+    class Meta:
+        db_table = 'jbm_counter'
+
+class JbmDual(models.Model):
+    dummy = models.IntegerField(primary_key=True)
+    class Meta:
+        db_table = 'jbm_dual'
+
+class JbmIdCache(models.Model):
+    node_id = models.IntegerField()
+    cntr = models.IntegerField()
+    jbm_id = models.CharField(max_length=255, blank=True)
+    class Meta:
+        db_table = 'jbm_id_cache'
+
+class JbmMsg(models.Model):
+    message_id = models.BigIntegerField(primary_key=True)
+    reliable = models.CharField(max_length=1, blank=True)
+    expiration = models.BigIntegerField(null=True, blank=True)
+    timestamp = models.BigIntegerField(null=True, blank=True)
+    priority = models.SmallIntegerField(null=True, blank=True)
+    type = models.SmallIntegerField(null=True, blank=True)
+    headers = models.TextField(blank=True) # This field type is a guess.
+    payload = models.TextField(blank=True) # This field type is a guess.
+    class Meta:
+        db_table = 'jbm_msg'
+
+class JbmMsgRef(models.Model):
+    message_id = models.BigIntegerField()
+    channel_id = models.BigIntegerField()
+    transaction_id = models.BigIntegerField(null=True, blank=True)
+    state = models.CharField(max_length=1, blank=True)
+    ord = models.BigIntegerField(null=True, blank=True)
+    page_ord = models.BigIntegerField(null=True, blank=True)
+    delivery_count = models.IntegerField(null=True, blank=True)
+    sched_delivery = models.BigIntegerField(null=True, blank=True)
+    class Meta:
+        db_table = 'jbm_msg_ref'
+
+class JbmPostoffice(models.Model):
+    postoffice_name = models.CharField(max_length=255)
+    node_id = models.IntegerField()
+    queue_name = models.CharField(max_length=255)
+    cond = models.CharField(max_length=1023, blank=True)
+    selector = models.CharField(max_length=1023, blank=True)
+    channel_id = models.BigIntegerField(null=True, blank=True)
+    clustered = models.CharField(max_length=1, blank=True)
+    all_nodes = models.CharField(max_length=1, blank=True)
+    class Meta:
+        db_table = 'jbm_postoffice'
+
+class JbmRole(models.Model):
+    role_id = models.CharField(max_length=32)
+    user_id = models.CharField(max_length=32)
+    class Meta:
+        db_table = 'jbm_role'
+
+class JbmTx(models.Model):
+    node_id = models.IntegerField(null=True, blank=True)
+    transaction_id = models.BigIntegerField(primary_key=True)
+    branch_qual = models.TextField(blank=True) # This field type is a guess.
+    format_id = models.IntegerField(null=True, blank=True)
+    global_txid = models.TextField(blank=True) # This field type is a guess.
+    class Meta:
+        db_table = 'jbm_tx'
+
+class JbmUser(models.Model):
+    user_id = models.CharField(max_length=32, primary_key=True)
+    passwd = models.CharField(max_length=32)
+    clientid = models.CharField(max_length=128, blank=True)
+    class Meta:
+        db_table = 'jbm_user'
+
+class Media(models.Model):
+    pk = models.BigIntegerField(primary_key=True)
+    fileset_iuid = models.TextField(unique=True)
+    fileset_id = models.TextField(blank=True)
+    media_rq_iuid = models.TextField(blank=True)
+    media_status = models.IntegerField()
+    media_status_info = models.TextField(blank=True)
+    media_usage = models.BigIntegerField()
+    created_time = models.DateTimeField(null=True, blank=True)
+    updated_time = models.DateTimeField(null=True, blank=True)
+    class Meta:
+        db_table = 'media'
+
+class Mpps(models.Model):
+    pk = models.BigIntegerField(primary_key=True)
+    patient_fk = models.ForeignKey('Patient', null=True, db_column='patient_fk', blank=True)
+    drcode_fk = models.ForeignKey(Code, null=True, db_column='drcode_fk', blank=True)
+    mpps_iuid = models.TextField(unique=True)
+    pps_start = models.DateTimeField(null=True, blank=True)
+    station_aet = models.TextField(blank=True)
+    modality = models.TextField(blank=True)
+    accession_no = models.TextField(blank=True)
+    mpps_status = models.IntegerField()
+    created_time = models.DateTimeField(null=True, blank=True)
+    updated_time = models.DateTimeField(null=True, blank=True)
+    mpps_attrs = models.TextField(blank=True) # This field type is a guess.
+    class Meta:
+        db_table = 'mpps'
+
+class MwlItem(models.Model):
+    pk = models.BigIntegerField(primary_key=True)
+    patient_fk = models.ForeignKey('Patient', null=True, db_column='patient_fk', blank=True)
+    sps_status = models.IntegerField(null=True, blank=True)
+    sps_id = models.TextField(blank=True)
+    start_datetime = models.DateTimeField()
+    station_aet = models.TextField()
+    station_name = models.TextField(blank=True)
+    modality = models.TextField()
+    perf_physician = models.TextField(blank=True)
+    perf_phys_fn_sx = models.TextField(blank=True)
+    perf_phys_gn_sx = models.TextField(blank=True)
+    perf_phys_i_name = models.TextField(blank=True)
+    perf_phys_p_name = models.TextField(blank=True)
+    req_proc_id = models.TextField()
+    accession_no = models.TextField(blank=True)
+    study_iuid = models.TextField()
+    created_time = models.DateTimeField(null=True, blank=True)
+    updated_time = models.DateTimeField(null=True, blank=True)
+    item_attrs = models.TextField(blank=True) # This field type is a guess.
+    class Meta:
+        db_table = 'mwl_item'
+
+class OtherPid(models.Model):
+    pk = models.BigIntegerField(primary_key=True)
+    pat_id = models.TextField()
+    pat_id_issuer = models.TextField()
+    class Meta:
+        db_table = 'other_pid'
+
+class Patient(models.Model):
+    pk = models.BigIntegerField(primary_key=True)
+    merge_fk = models.ForeignKey(''self'', null=True, db_column='merge_fk', blank=True)
+    pat_id = models.TextField(blank=True)
+    pat_id_issuer = models.TextField(blank=True)
+    pat_name = models.TextField(blank=True)
+    pat_fn_sx = models.TextField(blank=True)
+    pat_gn_sx = models.TextField(blank=True)
+    pat_i_name = models.TextField(blank=True)
+    pat_p_name = models.TextField(blank=True)
+    pat_birthdate = models.TextField(blank=True)
+    pat_sex = models.TextField(blank=True)
+    pat_custom1 = models.TextField(blank=True)
+    pat_custom2 = models.TextField(blank=True)
+    pat_custom3 = models.TextField(blank=True)
+    created_time = models.DateTimeField(null=True, blank=True)
+    updated_time = models.DateTimeField(null=True, blank=True)
+    pat_attrs = models.TextField(blank=True) # This field type is a guess.
+    class Meta:
+        db_table = 'patient'
+
+class PrivFile(models.Model):
+    pk = models.BigIntegerField(primary_key=True)
+    instance_fk = models.ForeignKey('PrivInstance', null=True, db_column='instance_fk', blank=True)
+    filesystem_fk = models.ForeignKey(Filesystem, null=True, db_column='filesystem_fk', blank=True)
+    filepath = models.TextField()
+    file_tsuid = models.TextField()
+    file_md5 = models.TextField(blank=True)
+    file_size = models.BigIntegerField(null=True, blank=True)
+    file_status = models.IntegerField(null=True, blank=True)
+    class Meta:
+        db_table = 'priv_file'
+
+class PrivInstance(models.Model):
+    pk = models.BigIntegerField(primary_key=True)
+    series_fk = models.ForeignKey('PrivSeries', null=True, db_column='series_fk', blank=True)
+    priv_type = models.IntegerField()
+    sop_iuid = models.TextField()
+    created_time = models.DateTimeField(null=True, blank=True)
+    inst_attrs = models.TextField(blank=True) # This field type is a guess.
+    class Meta:
+        db_table = 'priv_instance'
+
+class PrivPatient(models.Model):
+    pk = models.BigIntegerField(primary_key=True)
+    priv_type = models.IntegerField()
+    pat_id = models.TextField(blank=True)
+    pat_id_issuer = models.TextField(blank=True)
+    pat_name = models.TextField(blank=True)
+    pat_attrs = models.TextField(blank=True) # This field type is a guess.
+    class Meta:
+        db_table = 'priv_patient'
+
+class PrivSeries(models.Model):
+    pk = models.BigIntegerField(primary_key=True)
+    study_fk = models.ForeignKey('PrivStudy', null=True, db_column='study_fk', blank=True)
+    priv_type = models.IntegerField()
+    series_iuid = models.TextField()
+    src_aet = models.TextField(blank=True)
+    series_attrs = models.TextField(blank=True) # This field type is a guess.
+    class Meta:
+        db_table = 'priv_series'
+
+class PrivStudy(models.Model):
+    pk = models.BigIntegerField(primary_key=True)
+    patient_fk = models.ForeignKey(PrivPatient, null=True, db_column='patient_fk', blank=True)
+    priv_type = models.IntegerField()
+    study_iuid = models.TextField()
+    accession_no = models.TextField(blank=True)
+    study_attrs = models.TextField(blank=True) # This field type is a guess.
+    class Meta:
+        db_table = 'priv_study'
+
+class RelDevProto(models.Model):
+    device_fk = models.ForeignKey(Device, null=True, db_column='device_fk', blank=True)
+    prcode_fk = models.ForeignKey(Code, null=True, db_column='prcode_fk', blank=True)
+    class Meta:
+        db_table = 'rel_dev_proto'
+
+class RelGpspsAppcode(models.Model):
+    gpsps_fk = models.ForeignKey(Gpsps, null=True, db_column='gpsps_fk', blank=True)
+    appcode_fk = models.ForeignKey(Code, null=True, db_column='appcode_fk', blank=True)
+    class Meta:
+        db_table = 'rel_gpsps_appcode'
+
+class RelGpspsDevclass(models.Model):
+    gpsps_fk = models.ForeignKey(Gpsps, null=True, db_column='gpsps_fk', blank=True)
+    devclass_fk = models.ForeignKey(Code, null=True, db_column='devclass_fk', blank=True)
+    class Meta:
+        db_table = 'rel_gpsps_devclass'
+
+class RelGpspsDevloc(models.Model):
+    gpsps_fk = models.ForeignKey(Gpsps, null=True, db_column='gpsps_fk', blank=True)
+    devloc_fk = models.ForeignKey(Code, null=True, db_column='devloc_fk', blank=True)
+    class Meta:
+        db_table = 'rel_gpsps_devloc'
+
+class RelGpspsDevname(models.Model):
+    gpsps_fk = models.ForeignKey(Gpsps, null=True, db_column='gpsps_fk', blank=True)
+    devname_fk = models.ForeignKey(Code, null=True, db_column='devname_fk', blank=True)
+    class Meta:
+        db_table = 'rel_gpsps_devname'
+
+class RelGpspsGppps(models.Model):
+    gpsps_fk = models.ForeignKey(Gpsps, null=True, db_column='gpsps_fk', blank=True)
+    gppps_fk = models.ForeignKey(Gppps, null=True, db_column='gppps_fk', blank=True)
+    class Meta:
+        db_table = 'rel_gpsps_gppps'
+
+class RelHpdefProc(models.Model):
+    hpdef_fk = models.ForeignKey(Hpdef, null=True, db_column='hpdef_fk', blank=True)
+    proc_fk = models.ForeignKey(Code, null=True, db_column='proc_fk', blank=True)
+    class Meta:
+        db_table = 'rel_hpdef_proc'
+
+class RelHpdefReason(models.Model):
+    hpdef_fk = models.ForeignKey(Hpdef, null=True, db_column='hpdef_fk', blank=True)
+    reason_fk = models.ForeignKey(Code, null=True, db_column='reason_fk', blank=True)
+    class Meta:
+        db_table = 'rel_hpdef_reason'
+
+class RelHpdefRegion(models.Model):
+    hpdef_fk = models.ForeignKey(Hpdef, null=True, db_column='hpdef_fk', blank=True)
+    region_fk = models.ForeignKey(Code, null=True, db_column='region_fk', blank=True)
+    class Meta:
+        db_table = 'rel_hpdef_region'
+
+class RelPatOtherPid(models.Model):
+    patient_fk = models.ForeignKey(Patient, null=True, db_column='patient_fk', blank=True)
+    other_pid_fk = models.ForeignKey(OtherPid, null=True, db_column='other_pid_fk', blank=True)
+    class Meta:
+        db_table = 'rel_pat_other_pid'
+
+class RelStudyPcode(models.Model):
+    study_fk = models.ForeignKey('Study', null=True, db_column='study_fk', blank=True)
+    pcode_fk = models.ForeignKey(Code, null=True, db_column='pcode_fk', blank=True)
+    class Meta:
+        db_table = 'rel_study_pcode'
+
+class RelUpsAppcode(models.Model):
+    ups_fk = models.ForeignKey('Ups', null=True, db_column='ups_fk', blank=True)
+    appcode_fk = models.ForeignKey(Code, null=True, db_column='appcode_fk', blank=True)
+    class Meta:
+        db_table = 'rel_ups_appcode'
+
+class RelUpsDevclass(models.Model):
+    ups_fk = models.ForeignKey('Ups', null=True, db_column='ups_fk', blank=True)
+    devclass_fk = models.ForeignKey(Code, null=True, db_column='devclass_fk', blank=True)
+    class Meta:
+        db_table = 'rel_ups_devclass'
+
+class RelUpsDevloc(models.Model):
+    ups_fk = models.ForeignKey('Ups', null=True, db_column='ups_fk', blank=True)
+    devloc_fk = models.ForeignKey(Code, null=True, db_column='devloc_fk', blank=True)
+    class Meta:
+        db_table = 'rel_ups_devloc'
+
+class RelUpsDevname(models.Model):
+    ups_fk = models.ForeignKey('Ups', null=True, db_column='ups_fk', blank=True)
+    devname_fk = models.ForeignKey(Code, null=True, db_column='devname_fk', blank=True)
+    class Meta:
+        db_table = 'rel_ups_devname'
+
+class RelUpsPerformer(models.Model):
+    ups_fk = models.ForeignKey('Ups', null=True, db_column='ups_fk', blank=True)
+    performer_fk = models.ForeignKey(Code, null=True, db_column='performer_fk', blank=True)
+    class Meta:
+        db_table = 'rel_ups_performer'
+
+class Roles(models.Model):
+    user = models.ForeignKey('Users', null=True, blank=True)
+    roles = models.TextField(blank=True)
+    class Meta:
+        db_table = 'roles'
+
+class Series(models.Model):
+    pk = models.BigIntegerField(primary_key=True)
+    study_fk = models.ForeignKey('Study', null=True, db_column='study_fk', blank=True)
+    mpps_fk = models.ForeignKey(Mpps, null=True, db_column='mpps_fk', blank=True)
+    inst_code_fk = models.ForeignKey(Code, null=True, db_column='inst_code_fk', blank=True)
+    series_iuid = models.TextField(unique=True)
+    series_no = models.TextField(blank=True)
+    modality = models.TextField(blank=True)
+    body_part = models.TextField(blank=True)
+    laterality = models.TextField(blank=True)
+    series_desc = models.TextField(blank=True)
+    institution = models.TextField(blank=True)
+    station_name = models.TextField(blank=True)
+    department = models.TextField(blank=True)
+    perf_physician = models.TextField(blank=True)
+    perf_phys_fn_sx = models.TextField(blank=True)
+    perf_phys_gn_sx = models.TextField(blank=True)
+    perf_phys_i_name = models.TextField(blank=True)
+    perf_phys_p_name = models.TextField(blank=True)
+    pps_start = models.DateTimeField(null=True, blank=True)
+    pps_iuid = models.TextField(blank=True)
+    series_custom1 = models.TextField(blank=True)
+    series_custom2 = models.TextField(blank=True)
+    series_custom3 = models.TextField(blank=True)
+    num_instances = models.IntegerField()
+    src_aet = models.TextField(blank=True)
+    ext_retr_aet = models.TextField(blank=True)
+    retrieve_aets = models.TextField(blank=True)
+    fileset_iuid = models.TextField(blank=True)
+    fileset_id = models.TextField(blank=True)
+    availability = models.IntegerField()
+    series_status = models.IntegerField()
+    created_time = models.DateTimeField(null=True, blank=True)
+    updated_time = models.DateTimeField(null=True, blank=True)
+    series_attrs = models.TextField(blank=True) # This field type is a guess.
+    class Meta:
+        db_table = 'series'
+
+class SeriesReq(models.Model):
+    pk = models.BigIntegerField(primary_key=True)
+    series_fk = models.ForeignKey(Series, null=True, db_column='series_fk', blank=True)
+    accno_issuer_fk = models.ForeignKey(Issuer, null=True, db_column='accno_issuer_fk', blank=True)
+    accession_no = models.TextField(blank=True)
+    study_iuid = models.TextField(blank=True)
+    req_proc_id = models.TextField(blank=True)
+    sps_id = models.TextField(blank=True)
+    req_service = models.TextField(blank=True)
+    req_physician = models.TextField(blank=True)
+    req_phys_fn_sx = models.TextField(blank=True)
+    req_phys_gn_sx = models.TextField(blank=True)
+    req_phys_i_name = models.TextField(blank=True)
+    req_phys_p_name = models.TextField(blank=True)
+    class Meta:
+        db_table = 'series_req'
+
+class Study(models.Model):
+    pk = models.BigIntegerField(primary_key=True)
+    patient_fk = models.ForeignKey(Patient, null=True, db_column='patient_fk', blank=True)
+    accno_issuer_fk = models.ForeignKey(Issuer, null=True, db_column='accno_issuer_fk', blank=True)
+    study_iuid = models.TextField(unique=True)
+    study_id = models.TextField(blank=True)
+    study_datetime = models.DateTimeField(null=True, blank=True)
+    accession_no = models.TextField(blank=True)
+    ref_physician = models.TextField(blank=True)
+    ref_phys_fn_sx = models.TextField(blank=True)
+    ref_phys_gn_sx = models.TextField(blank=True)
+    ref_phys_i_name = models.TextField(blank=True)
+    ref_phys_p_name = models.TextField(blank=True)
+    study_desc = models.TextField(blank=True)
+    study_custom1 = models.TextField(blank=True)
+    study_custom2 = models.TextField(blank=True)
+    study_custom3 = models.TextField(blank=True)
+    study_status_id = models.TextField(blank=True)
+    mods_in_study = models.TextField(blank=True)
+    cuids_in_study = models.TextField(blank=True)
+    num_series = models.IntegerField()
+    num_instances = models.IntegerField()
+    ext_retr_aet = models.TextField(blank=True)
+    retrieve_aets = models.TextField(blank=True)
+    fileset_iuid = models.TextField(blank=True)
+    fileset_id = models.TextField(blank=True)
+    availability = models.IntegerField()
+    study_status = models.IntegerField()
+    checked_time = models.DateTimeField(null=True, blank=True)
+    created_time = models.DateTimeField(null=True, blank=True)
+    updated_time = models.DateTimeField(null=True, blank=True)
+    study_attrs = models.TextField(blank=True) # This field type is a guess.
+    class Meta:
+        db_table = 'study'
+
+class StudyOnFs(models.Model):
+    pk = models.BigIntegerField(primary_key=True)
+    study_fk = models.ForeignKey(Study, null=True, db_column='study_fk', blank=True)
+    filesystem_fk = models.ForeignKey(Filesystem, null=True, db_column='filesystem_fk', blank=True)
+    access_time = models.DateTimeField()
+    mark_to_delete = models.BooleanField()
+    class Meta:
+        db_table = 'study_on_fs'
+
+class StudyPermission(models.Model):
+    pk = models.BigIntegerField(primary_key=True)
+    study_iuid = models.TextField()
+    action = models.TextField()
+    roles = models.TextField()
+    class Meta:
+        db_table = 'study_permission'
+
+class Timers(models.Model):
+    timerid = models.CharField(max_length=80)
+    targetid = models.CharField(max_length=250)
+    initialdate = models.DateTimeField()
+    timerinterval = models.BigIntegerField(null=True, blank=True)
+    instancepk = models.TextField(blank=True) # This field type is a guess.
+    info = models.TextField(blank=True) # This field type is a guess.
+    class Meta:
+        db_table = 'timers'
+
+class Ups(models.Model):
+    pk = models.BigIntegerField(primary_key=True)
+    patient_fk = models.ForeignKey(Patient, null=True, db_column='patient_fk', blank=True)
+    code_fk = models.BigIntegerField(null=True, blank=True)
+    ups_iuid = models.TextField(unique=True)
+    ups_tuid = models.TextField(blank=True)
+    adm_id = models.TextField(blank=True)
+    adm_id_issuer_id = models.TextField(blank=True)
+    adm_id_issuer_uid = models.TextField(blank=True)
+    ups_label = models.TextField()
+    uwl_label = models.TextField()
+    ups_start_time = models.DateTimeField()
+    ups_compl_time = models.DateTimeField(null=True, blank=True)
+    ups_state = models.IntegerField(null=True, blank=True)
+    ups_prior = models.IntegerField(null=True, blank=True)
+    created_time = models.DateTimeField(null=True, blank=True)
+    updated_time = models.DateTimeField(null=True, blank=True)
+    ups_attrs = models.TextField(blank=True) # This field type is a guess.
+    class Meta:
+        db_table = 'ups'
+
+class UpsGlobSubscr(models.Model):
+    pk = models.BigIntegerField(primary_key=True)
+    aet = models.TextField(unique=True)
+    deletion_lock = models.BooleanField()
+    class Meta:
+        db_table = 'ups_glob_subscr'
+
+class UpsRelPs(models.Model):
+    pk = models.BigIntegerField(primary_key=True)
+    ups_fk = models.ForeignKey(Ups, null=True, db_column='ups_fk', blank=True)
+    sop_iuid = models.TextField()
+    sop_cuid = models.TextField()
+    class Meta:
+        db_table = 'ups_rel_ps'
+
+class UpsReplPs(models.Model):
+    pk = models.BigIntegerField(primary_key=True)
+    ups_fk = models.ForeignKey(Ups, null=True, db_column='ups_fk', blank=True)
+    sop_iuid = models.TextField()
+    sop_cuid = models.TextField()
+    class Meta:
+        db_table = 'ups_repl_ps'
+
+class UpsReq(models.Model):
+    pk = models.BigIntegerField(primary_key=True)
+    ups_fk = models.ForeignKey(Ups, null=True, db_column='ups_fk', blank=True)
+    req_proc_id = models.TextField(blank=True)
+    accession_no = models.TextField(blank=True)
+    confidentiality = models.TextField(blank=True)
+    req_service = models.TextField(blank=True)
+    class Meta:
+        db_table = 'ups_req'
+
+class UpsSubscr(models.Model):
+    pk = models.BigIntegerField(primary_key=True)
+    ups_fk = models.ForeignKey(Ups, null=True, db_column='ups_fk', blank=True)
+    aet = models.TextField()
+    deletion_lock = models.BooleanField()
+    class Meta:
+        db_table = 'ups_subscr'
+
+class Users(models.Model):
+    user_id = models.TextField(primary_key=True)
+    passwd = models.TextField(blank=True)
+    class Meta:
+        db_table = 'users'
+
+class VerifyObserver(models.Model):
+    pk = models.BigIntegerField(primary_key=True)
+    instance_fk = models.ForeignKey(Instance, null=True, db_column='instance_fk', blank=True)
+    verify_datetime = models.DateTimeField(null=True, blank=True)
+    observer_name = models.TextField(blank=True)
+    observer_fn_sx = models.TextField(blank=True)
+    observer_gn_sx = models.TextField(blank=True)
+    observer_i_name = models.TextField(blank=True)
+    observer_p_name = models.TextField(blank=True)
+    class Meta:
+        db_table = 'verify_observer'
+

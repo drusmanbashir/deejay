@@ -1,14 +1,14 @@
 import models
 from django.contrib import admin
-from django.contrib.auth.models import User
-from django_markdown.admin import MarkdownModelAdmin
+#from django.contrib.auth.models import User
+#from django_markdown.admin import MarkdownModelAdmin
 
 class CategoryAdmin(admin.ModelAdmin):
     prepopulated_fields = {"slug": ("title",)}
 
 class CategoryToPostInline(admin.TabularInline):
     model = models.CategoryToPost
-    extra = 1
+    extra = 2
 
 class PostAdmin(admin.ModelAdmin):
     prepopulated_fields = {"slug": ("title",)}

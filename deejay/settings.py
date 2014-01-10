@@ -24,14 +24,14 @@ sys.path.append(normpath(join(DJANGO_ROOT, 'libs')))
 MANAGERS = ADMINS
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'deejay.db',                      # Or path to database file if using sqlite3.
+        'ENGINE': 'django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+        'NAME': 'pacsdb',                      # Or path to database file if using sqlite3.
         # The following settings are not used with sqlite3:
-        'USER': '',
-        'PASSWORD': '',
+        'USER': 'usman',
+        'PASSWORD': 'barrium',
         'HOST': '',                      # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
         'PORT': '',                      # Set to empty string for default.
-    }
+    },
 }
 
 # Hosts/domain names that are valid for this site; required if DEBUG is False
@@ -92,10 +92,6 @@ STATICFILES_FINDERS = (
     #'django.contrib.staticfiles.finders.DefaultStorageFinder',
 )
 ########## END STATIC FILE CONFIGURATION
-
-
-
-
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = '5*f&amp;j^drul=fnds^jx1-e(d^mmqh7cjq0=ygao!p$r!7^ph1g4'
 
@@ -103,7 +99,7 @@ SECRET_KEY = '5*f&amp;j^drul=fnds^jx1-e(d^mmqh7cjq0=ygao!p$r!7^ph1g4'
 TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.Loader',
     'django.template.loaders.app_directories.Loader',
-#     'django.template.loaders.eggs.Loader',
+    #'django.template.loaders.eggs.Loader',
 )
 TEMPLATE_DIRS = (
     normpath(join(DJANGO_ROOT, 'templates')),
@@ -117,9 +113,8 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     # Uncomment the next line for simple clickjacking protection:
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware' ,
-   # 'django.contrib.staticfiles',
-   
+    'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
+    #'django.contrib.staticfiles',
 )
 
 ROOT_URLCONF = 'deejay.urls'
@@ -137,10 +132,9 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     # Uncomment the next line to enable the admin:
-     'django.contrib.admin',
+    'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
-    
     'blog',
     'editor',
     'django.contrib.flatpages',
@@ -151,6 +145,10 @@ INSTALLED_APPS = (
     'numpy',
     'south',
     'dicom',
+    'pacscon',
+    'knowledge',
+    'trialApp',
+    'viewer',
 )
 
 # A sample logging configuration. The only tangible logging
@@ -181,3 +179,15 @@ LOGGING = {
         },
     }
 }
+
+
+#ROUTERS = normpath(join(DJANGO_ROOT, 'deejay/pacsrouter'))
+#DATABASE_ROUTERS = ['pacscon.pacsrouter.pacsRouter', 'pacscon.pacsrouter.trialRouter', ]
+
+SC_DICOM_SERVER = 'localhost'
+SC_DICOM_PORT = 11112
+
+SC_WADO_SERVER = 'localhost'
+SC_WADO_PORT = 8080
+SC_WADO_PATH = 'wado'
+AET = 'DCM4CHEE'

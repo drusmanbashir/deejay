@@ -1,9 +1,9 @@
 import models
 from django.contrib import admin
-from django.contrib.auth.models import User
-from django.template import RequestContext
-from django.conf.urls.defaults import patterns
-from django.shortcuts import render_to_response
+#from django.contrib.auth.models import User
+#from django.template import RequestContext
+#from django.conf.urls.defaults import patterns
+#from django.shortcuts import render_to_response
 from django.conf import settings
 
 class UserToCaseInline(admin.TabularInline):
@@ -23,7 +23,7 @@ class CaseAdmin(admin.ModelAdmin):
     fields = ['title', 'description', 'system', 'folder', 'dirTree',  ]
     exclude = ('user', 'files')
     inlines = [UserToCaseInline,
-            CaseToFileInline,
+                CaseToFileInline,
            # ImageInline
     ]
 
