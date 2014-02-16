@@ -13,7 +13,6 @@ class Migration(SchemaMigration):
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('question', self.gf('django.db.models.fields.TextField')()),
             ('system', self.gf('django.db.models.fields.CharField')(max_length=3)),
-            ('case', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['pacscon.Patient'])),
             ('created', self.gf('django.db.models.fields.DateField')(auto_now_add=True, blank=True)),
             ('reference', self.gf('django.db.models.fields.TextField')(blank=True)),
         ))
@@ -32,10 +31,18 @@ class Migration(SchemaMigration):
         db.create_table(u'knowledge_answer', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('body', self.gf('django.db.models.fields.TextField')()),
-            ('correct', self.gf('django.db.models.fields.BooleanField')()),
-            ('sba', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['knowledge.SBA'])),
+            ('correct', self.gf('django.db.models.fields.BooleanField')(default=False)),
+            ('sba', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['knowledge.SBA'], null=True)),
         ))
         db.send_create_signal(u'knowledge', ['Answer'])
+
+        # Adding model 'SBAToCase'
+        db.create_table(u'knowledge_sbatocase', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('sba', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['knowledge.SBA'])),
+            ('case', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['pacscon.Patient'])),
+        ))
+        db.send_create_signal(u'knowledge', ['SBAToCase'])
 
 
     def backwards(self, orm):
@@ -48,14 +55,17 @@ class Migration(SchemaMigration):
         # Deleting model 'Answer'
         db.delete_table(u'knowledge_answer')
 
+        # Deleting model 'SBAToCase'
+        db.delete_table(u'knowledge_sbatocase')
+
 
     models = {
         u'knowledge.answer': {
             'Meta': {'object_name': 'Answer'},
             'body': ('django.db.models.fields.TextField', [], {}),
-            'correct': ('django.db.models.fields.BooleanField', [], {}),
+            'correct': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'sba': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['knowledge.SBA']"})
+            'sba': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['knowledge.SBA']", 'null': 'True'})
         },
         u'knowledge.mnemonic': {
             'Meta': {'object_name': 'Mnemonic'},
@@ -66,12 +76,18 @@ class Migration(SchemaMigration):
         },
         u'knowledge.sba': {
             'Meta': {'object_name': 'SBA'},
-            'case': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['pacscon.Patient']"}),
+            'case': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': u"orm['pacscon.Patient']", 'null': 'True', 'through': u"orm['knowledge.SBAToCase']", 'blank': 'True'}),
             'created': ('django.db.models.fields.DateField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'question': ('django.db.models.fields.TextField', [], {}),
             'reference': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
             'system': ('django.db.models.fields.CharField', [], {'max_length': '3'})
+        },
+        u'knowledge.sbatocase': {
+            'Meta': {'object_name': 'SBAToCase'},
+            'case': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['pacscon.Patient']"}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'sba': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['knowledge.SBA']"})
         },
         u'pacscon.diagnosis': {
             'Meta': {'object_name': 'Diagnosis', 'db_table': "u'diagnosis'"},

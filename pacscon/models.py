@@ -7,7 +7,6 @@
 # Also note: You'll have to insert the output of 'django-admin.py sqlcustom [appname]'
 # into your database.
 from __future__ import unicode_literals
-
 from django.db import models
 
 class Ae(models.Model):
@@ -96,7 +95,7 @@ class Gppps(models.Model):
         db_table = 'gppps'
 
 class Gpsps(models.Model):
-    id= models.IntegerField(primary_key=True, db_column='pk')
+    id = models.IntegerField(primary_key=True, db_column='pk')
     patient_fk = models.ForeignKey('Patient', null=True, db_column='patient_fk', blank=True)
     code_fk = models.ForeignKey(Code, null=True, db_column='code_fk', blank=True)
     gpsps_iuid = models.CharField(max_length=160, unique=True)
@@ -248,8 +247,36 @@ class OtherPid(models.Model):
     class Meta:
         db_table = 'other_pid'
 
+#class Case (models.Model):
+#    id = models.AutoField(primary_key=True)
+#    time_stamp = models.DateTimeField(null=True, auto_now_add=True)
+#    is_dicom = models.BooleanField(null=False, blank=True)
+#    PatientId = models.IntegerField(null=True, blank=True, db_column="patientid")
+#
+#    def __unicode__(self):
+#        return "%s" % self.id
+
+#    def save(self):
+#        x = 1
+#        idcounter = 0
+#        while (x < Case.objects.count() + 1):
+#                if Case.objects.order_by('id')[0 + idcounter].pk > x:
+#                        break
+#                else:
+#                        x += 1
+#                        idcounter += 1
+#
+#        self.id = x
+#        if hasattr(self, 'patient'):
+#            self.is_dicom = True
+#            self.PatientId = self.patient.id
+#        else:
+#            self.is_dicom = False
+#            self.PatientId = self.patientjpeg.id
+#        super(Case, self).save()
 class Patient(models.Model):
     id = models.AutoField(primary_key=True, db_column='pk')
+#    case_id = models.OneToOneField(Case, null=True, blank=True, db_column='case_id')
     merge_fk = models.ForeignKey('self', null=True, db_column='merge_fk', blank=True)
     pat_id = models.CharField(max_length=160, blank=True)
     pat_id_issuer = models.CharField(max_length=160, blank=True)
@@ -263,19 +290,64 @@ class Patient(models.Model):
     pat_custom1 = models.CharField(max_length=160, blank=True)
     pat_custom2 = models.CharField(max_length=160, blank=True)
     pat_custom3 = models.CharField(max_length=160, blank=True)
-    created_time = models.DateTimeField(null=True, blank=True)
-    updated_time = models.DateTimeField(null=True, blank=True)
+    created_time = models.DateTimeField(null=True, auto_now_add=True)
+    updated_time = models.DateTimeField(null=True, auto_now_add=True)
     pat_attrs = models.CharField(max_length=160, blank=True) # This field type is a guess.
     description = models.TextField(blank=True)
+    report = models.TextField(blank=True)
     diagnosis = models.ForeignKey('Diagnosis', db_column='diagnosis_fk', blank=True)
-    system = models.CharField(max_length=3, choices=System.which_system)
+    system = models.CharField(max_length=3, choices=System.which_system, db_index=True)
 
     class Meta:
         db_table = 'patient'
 
     def __unicode__(self):
-        return u"%s" % self.pk
+        return u"%s" % self.id
 
+class PatientJpeg (models.Model):
+    id = models.AutoField(primary_key=True, db_column='pk')
+#    case_id = models.OneToOneField(Case, null=True, blank=True, db_column='case_id')
+    pat_age = models.CharField(max_length=160, null=True, blank=True)
+    pat_sex = models.CharField(max_length=160, null=True, blank=True)
+    description = models.TextField(null=True, blank=True)
+    report = models.TextField(null=True, blank=True)
+    diagnosis = models.ForeignKey('Diagnosis', db_column='diagnosis_fk', null=True, blank=True)
+    system = models.CharField(max_length=3, choices=System.which_system, null=True, db_index=True)
+
+    def __unicode__(self):
+        return u"%s" % self.id
+
+    def jpeg_paths(self):
+        array = []
+        for x in self.jpeg_set.all():
+            array.append(x.image.path)
+        return array
+
+    class Meta:
+        db_table = 'patient_jpeg'
+
+
+class Jpeg(models.Model):
+    id = models.AutoField(primary_key=True)
+    patient_jpeg_fk = models.ForeignKey('PatientJpeg', db_column='patient_jpeg_fk', blank=True, null=True)
+    width = models.IntegerField(blank=True, null=True)
+    height = models.IntegerField(blank=True, null=True)
+    image = models.ImageField(upload_to="images/", height_field='height', width_field='width')
+
+    class Meta:
+        managed = False
+        db_table = 'jpeg'
+
+    def ImSize(self):
+        return "%s x %s" % (self.width, self.height)
+
+    def __unicode__(self):
+        return u"%s" % self.id
+
+    def thumbnail(self):
+        return """<a href="/media/%s"><img border="0" alt="" src="/media/%s" height="40" /></a>""" % (
+                                                                    (self.image.name, self.image.name))
+    thumbnail.allow_tags = True
 class Roles(models.Model):
     user = models.ForeignKey('Users', null=True, blank=True)
     roles = models.CharField(max_length=160, blank=True)
