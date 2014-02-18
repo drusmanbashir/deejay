@@ -1,0 +1,72 @@
+<!# WORK ON editor/jsON AND WEBSOCKETS !!!!!
+<!DOCTYPE html>
+
+{% load staticfiles %}
+<html lang="en">
+  <head>
+    
+    <title>Home Page | Docsmarts.com</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="{% static "pacscon/css/reset.css"%}" type="text/css" media="all">
+    <link rel="stylesheet" href="{% static "pacscon/css/style.css"%}" type="text/css" media="all">
+    <link rel="stylesheet" href="{% static "pacscon/css/imageview.css"%}" type="text/css" media="all">
+    <!  <link rel = "stylesheet" href="{% static "pacscon/css/flick/jquery-ui-1.10.2.custom.css" %}" type="text/css">!>
+    <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.10/themes/base/jquery-ui.css" type="text/css" media="all" />
+    <script type="text/javascript" src="{% static "pacscon/js/jquery-1.9.1.js"%}" ></script>
+    <script type="text/javascript" src="{% static "pacscon/js/jquery-ui-1.10.2.custom.min.js"%}" ></script>
+    <script type="text/javascript" src="{% static "pacscon/js/cufon-yui.js"%}"></script>
+    <script type="text/javascript" src="{% static "pacscon/js/Humanst521_BT_400.font.js"%}"></script>
+    <script type="text/javascript" src="{% static "pacscon/js/Humanst521_Lt_BT_400.font.js"%}"></script>
+    <script type="text/javascript" src="{% static "pacscon/js/roundabout.js"%}"></script>
+    <script type="text/javascript" src="{% static "pacscon/js/roundabout_shapes.js"></script>
+    <script type="text/javascript" src="{% static "pacscon/js/cufon-replace.js"%}"></script>
+
+    <script type="text/javascript" src="{% static "pacscon/js/gallery_init.js"%}"></script>
+    <script type="text/javascript" src="{% static "pacscon/js/imageview.js"%}"></script>
+<script >
+    var arr = []
+        
+    {% for tix in patient.jpeg_set.all %}
+    arr.push('{{tix.image.url}}');
+        {% endfor %}
+        var numb = 0;
+        var total = {{ patient.jpeg_set.count }};
+
+        var width = {{patient.jpeg_set.all.0.width}}
+        var height = {{patient.jpeg_set.all.0.height}}
+
+</script>
+    <!--[if lt IE 7]>
+    <link rel="stylesheet" href="css/ie/ie6.css" type="text/css" media="all">
+    <![endif]-->
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="/static/js/html5.js"></script>
+    <script type="text/javascript" src="/static/js/IE9.js"></script>
+    <![endif]-->
+  </head>
+
+
+  <body>
+      {{patient.id}}
+
+    <header>
+    <div class="container">
+      <h1><img src="{% static "images/logo.jpg"%}" ><a href="{% url 'latest' %}">DocSmarts</a></h1>
+      <nav>
+      <ul>
+        <li><a href="{%url 'latest' %}" class="current">Home</a></li>
+        <li><a href="media.html">Media</a></li>
+        {% load flatpages%}
+        {% get_flatpages as flatpages%}
+        {%for flatpage in flatpages%}
+        <li><a href="{{flatpage.url}}">{{flatpage.title}}</a></li>
+        {%endfor %}
+      </ul>
+      </nav>
+    </div>
+    </header>
+
+    <div id="main">
+      <div class = "main-box">
+        <div class = "container">    
+          <div class="wrapper">

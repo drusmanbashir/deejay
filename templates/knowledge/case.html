@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+{% include 'knowledge/header.html' %}
+<script type="text/javascript" src="https://www.java.com/js/deployJava.js"></script>
+
+<script type="text/javascript">
+deployJava.launchButtonPNG=  'http://www.dcm4che.org/confluence/download/attachments/17891332/weasis2.png';
+var url = 'http://localhost:8080/weasis-pacs-connector/viewer.jnlp?patientID={{patient.pat_id}}';
+deployJava.createWebStartLaunchButton(url, '1.6.0_10');
+</script>
+<div id ="content">
+    <br><br>
+    <div id="container">
+        </article>
+        {{patient.diagnosis}}
+        </div>
+    </div>
+</div>
+</div>
+
+{% include 'editor/footer.html' %}

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+{% include 'knowledge/header.html' %}
+<script type = "text/javascript">
+    var list = {{list|safe}} ;
+</script>
+<div id ="content">
+    <br><br>
+    <div id="container">
+        </article>
+        <script>
+            for (var x = 0; x<list.length; x=x+1){
+                document.write("<h2> System :" + list[x][0]+ "</h2>");
+                document.write("<table>  <tr>   <th>Case ID</th>         <th>Diagnosis</th> <th>Type of File </th>           </tr>");
+
+                    for (var y = 0; y<list[x][1].length;y=y+1){
+                        document.write("<tr>");
+                        document.write("<td>"+list[x][1][y][0]+"</td>");
+                        document.write("<td> <a href='/knowledge/case/"+list[x][1][y][0]+'/'+list[x][1][y][3]+"'>");
+                                document.write(list[x][1][y][2]+"</a><td>");
+                            document.write(list[x][1][y][3]);
+                        document.write("</td></tr>");
+                    }
+                    document.write("</table><br>");
+            }
+
+            </script>
+
+
+        </div>
+    </div>
+</div>
+</div>
+
+{% include 'editor/footer.html' %}
