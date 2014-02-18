@@ -9,9 +9,9 @@ class DiagnosisInline (admin.StackedInline):
     model = Diagnosis
 
 class PatientAdmin(admin.ModelAdmin):
-    fields = ['pat_id', 'pat_name', 'pat_birthdate', 'description', 'report',
+    fields = ['pat_name', 'pat_birthdate', 'description', 'report',
              'diagnosis', 'system']
-    list_display = ['id', 'pat_id', ]
+    list_display = ['id', 'pat_birthdate', ]
 
 class PatientJpegAdmin (admin.ModelAdmin):
     fields = ['pat_sex', 'pat_age', 'description', 'diagnosis', 'system',

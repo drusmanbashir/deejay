@@ -9,7 +9,7 @@ DJANGO_ROOT = dirname(dirname(abspath(__file__)))
 # Site name.
 SITE_NAME = basename(DJANGO_ROOT)
 
-# Absolute filesystem path to the top-level project folder.
+# Absolute filesystyesem path to the top-level project folder.
 SITE_ROOT = dirname(DJANGO_ROOT)
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
@@ -155,8 +155,8 @@ INSTALLED_APPS = (
     'dicom',
     'pacscon',
     'knowledge',
-    'trialApp',
-    'viewer',
+    #'trialApp',
+  #  'viewer',
 )
 
 # A sample logging configuration. The only tangible logging

@@ -5,7 +5,7 @@ from django.template import Context
 from django.conf import settings
 import cStringIO
 import requests
-import gdcm
+#import gdcm
 import json
 import dicom
 

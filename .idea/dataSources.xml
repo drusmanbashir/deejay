@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DataSourceManagerImpl" format="xml" hash="333533228">
+    <data-source source="LOCAL" name="Django default" uuid="1ab90fee-45ab-46f7-b2ab-0dd0e7e7a379">
+      <driver-ref>postgresql</driver-ref>
+      <jdbc-driver>org.postgresql.Driver</jdbc-driver>
+      <jdbc-url>jdbc:postgresql:pacsdb</jdbc-url>
+      <user-name>usman</user-name>
+      <user-password>dfc8dfcbdfd8dfd8dfc3dfdfdfc7</user-password>
+      <libraries />
+    </data-source>
+    <data-source source="LOCAL" name="Django theory" uuid="7e83fd8a-a4e3-4369-bd3c-657bbd047337">
+      <driver-ref>postgresql</driver-ref>
+      <jdbc-driver>org.postgresql.Driver</jdbc-driver>
+      <jdbc-url>jdbc:postgresql:rad</jdbc-url>
+      <user-name>usman</user-name>
+      <user-password>dfc8dfcbdfd8dfd8dfc3dfdfdfc7</user-password>
+      <libraries />
+    </data-source>
+  </component>
+</project>
+
